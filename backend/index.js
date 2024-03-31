@@ -14,7 +14,7 @@ const usersRouter = require('./routes/users')
 
 
 // Routers
-app.use("/users", usersRouter);
+app.use("/user", usersRouter);
 
 const PORT = process.env.PORT || 5000;
 

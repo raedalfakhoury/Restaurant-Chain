@@ -22,4 +22,21 @@ CREATE TABLE permissions (
   permission VARCHAR(255)
 );
 
- 
+ -- Create a table openingHours
+CREATE TABLE openingHours (
+  id SERIAL PRIMARY KEY,
+	start_time  VARCHAR(255) ,
+  end_time  VARCHAR(255) , 
+  Street_name VARCHAR(255) ,
+  restaurant_Name VARCHAR(255) ,
+  FOREIGN KEY (restaurant_Name) REFERENCES restaurant (restaurant_Name)
+);
+
+ -- Create a table resturant
+CREATE TABLE restaurant (
+  restaurant_id SERIAL PRIMARY KEY,
+	restaurant_Name  VARCHAR(255) UNIQUE,
+  Phone  VARCHAR(255) UNIQUE, 
+  Street_name VARCHAR(255) ,
+  active INT DEFAULT 0
+);

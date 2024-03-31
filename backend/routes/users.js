@@ -10,5 +10,5 @@ usersRouter.post("/login", login);
 module.exports = usersRouter;
 
 
-// !  /users/register
-// !  /users/login
+// !  /user/register
+// !  /user/login
