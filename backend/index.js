@@ -11,10 +11,12 @@ app.use(express.json());
 app.use(cors());
  //import user Routers
 const usersRouter = require('./routes/users')
+const restaurantRouter = require('./routes/restaurant')
 
 
 // Routers
 app.use("/user", usersRouter);
+app.use("/restaurant", restaurantRouter);
 
 const PORT = process.env.PORT || 5000;
 

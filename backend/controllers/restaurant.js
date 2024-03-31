@@ -16,7 +16,7 @@ const addRestaurant = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "restaurant created successfully",
-        result
+        result:result.rows
       });
     })
     .catch((err) => {
@@ -30,5 +30,5 @@ const addRestaurant = async (req, res) => {
  
 
 module.exports = {
-    addRestaurant, 
+    addRestaurant
 };
