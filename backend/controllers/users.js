@@ -7,7 +7,7 @@ const register = async (req, res) => {
   const { first_name, last_name, email, password } =
     req.body; 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
-  const query = `INSERT INTO customers (first_name, last_name, email, password) VALUES ($1,$2,$3,$4)`;
+  const query = `INSERT INTO users (first_name, last_name, email, password) VALUES ($1,$2,$3,$4)`;
   const data = [
     first_name,
     last_name, 
@@ -34,7 +34,7 @@ const register = async (req, res) => {
 const login = (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
-  const query = `SELECT * FROM customers WHERE email = $1`;
+  const query = `SELECT * FROM users WHERE email = $1`;
   const data = [email.toLowerCase()];
   pool
     .query(query, data)

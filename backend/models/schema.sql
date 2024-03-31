@@ -11,8 +11,8 @@ CREATE TABLE users (
   first_name VARCHAR(255) ,
   last_name VARCHAR(255) UNIQUE, 
   email VARCHAR(255) UNIQUE,
-  role_id INT DEFAULT 1,
   password VARCHAR(255),
+  role_id INT DEFAULT 1,
   FOREIGN KEY (role_id) REFERENCES Roles (role_id)
 );
 
