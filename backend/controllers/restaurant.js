@@ -134,12 +134,65 @@ const getAllRestaurantbranchById =  (req,res) => {
         });
       });
   };
- 
+  const getItemByResBranchId =  (req,res) => {
+    const {id} = req.params;
+    const query = `
+    SELECT DISTINCT
+    restaurant.restaurant_id,
+    menu.menu_id,
+    restaurant.restaurant_name,
+    restaurant.phone,
+    restaurant.street_name,
+    restaurant.start_time,
+    restaurant.end_time,
+    restaurant.nearby_landmarks,
+    restaurant.active,
+    restaurant.active,
+   menu.item,
+   menu.description,
+   menu.price
+    FROM
+    restaurant_menu 
+    JOIN
+    restaurant ON restaurant_menu.restaurant_id = restaurant.restaurant_id
+    
+    JOIN
+    menu ON restaurant_menu.menu_id = menu.menu_id
+
+     WHERE restaurant.restaurant_id = $1
+    
+  `; 
+    pool
+      .query(query,[id])
+      .then((result) => {
+        if (result.rowCount) {
+            res.status(200).json({
+          success: true,
+          message: "branch getting successfully",
+          result:result.rows
+        });
+        }else{
+            res.status(200).json({
+                success: true,
+                message: "Please Add Menu",
+              });
+        }
+      })
+      .catch((err) => {
+         console.log(err);
+        res.status(409).json({
+          success: false,
+          message: "Server Error",
+          err,
+        });
+      });
+  };
  
 module.exports = {
     addRestaurant ,
     menu,
     restaurant_menu,
     getAllRestaurantbranch,
-    getAllRestaurantbranchById
+    getAllRestaurantbranchById,
+    getItemByResBranchId
 };

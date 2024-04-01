@@ -5,7 +5,8 @@ const {
   menu,
   restaurant_menu,
   getAllRestaurantbranch,
-  getAllRestaurantbranchById
+  getAllRestaurantbranchById,
+  getItemByResBranchId
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -35,6 +36,12 @@ restaurantRouter.get(
   authentication,
   authorization("view"),
   getAllRestaurantbranchById
+);
+restaurantRouter.get(
+  "/branch_item/:id",
+  authentication,
+  authorization("view"),
+  getItemByResBranchId
 );
 
 module.exports = restaurantRouter;
