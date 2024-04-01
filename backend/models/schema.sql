@@ -28,15 +28,15 @@ CREATE TABLE openingHours (
 	start_time  VARCHAR(255) ,
   end_time  VARCHAR(255) , 
   Street_name VARCHAR(255) ,
-  restaurant_Name VARCHAR(255) ,
-  FOREIGN KEY (restaurant_Name) REFERENCES restaurant (restaurant_Name)
+  restaurant_id INT ,
+  FOREIGN KEY (restaurant_id) REFERENCES restaurant (restaurant_id)
 );
 
  -- Create a table resturant
 CREATE TABLE restaurant (
   restaurant_id SERIAL PRIMARY KEY,
-	restaurant_Name  VARCHAR(255) UNIQUE,
-  Phone  VARCHAR(255) UNIQUE, 
+	restaurant_Name  VARCHAR(255) ,
+  Phone  VARCHAR(255) , 
   Street_name VARCHAR(255) ,
   active INT DEFAULT 0
 );

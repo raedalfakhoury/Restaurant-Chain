@@ -32,8 +32,8 @@ const register = async (req, res) => {
 };
 
 const login = (req, res) => {
-  const password = req.body.password;
   const email = req.body.email;
+  const password = req.body.password;
   const query = `SELECT * FROM users WHERE email = $1`;
   const data = [email.toLowerCase()];
   pool
@@ -45,7 +45,22 @@ const login = (req, res) => {
           if (err) res.json(err);
           if (response) {
             const payload = {
-              userId: result.rows[0].customer_id
+              userId: result.rows[0].user_id,
+              // role:result.rows[0].role_id,
+              // permissions: result.rows[0].role_id,
+              role: {
+                role:
+                result.rows[0].role_id == "2" ? "Admin" : "User",
+                permissions:
+                result.rows[0].role_id == "2"
+                    ? [
+                        "manage"
+                      ]
+                    : [
+                        "view"
+                      ],
+              },
+              
             };
             const options = { expiresIn: "1d" };
             const secret = process.env.SECRET;
@@ -55,7 +70,8 @@ const login = (req, res) => {
                 token,
                 success: true,
                 message: `Valid login credentials`,
-                userId:result.rows[0].customer_id
+                role:result.rows[0].role_id == 2 ? "Admin" : "User",
+                permissions: result.rows[0].role_id  == 2 ? ["manage"] : ["view"]
               });
             } else {
               throw Error;
