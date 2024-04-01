@@ -54,7 +54,8 @@ const login = (req, res) => {
                 permissions:
                 result.rows[0].role_id == "2"
                     ? [
-                        "manage"
+                        "manage",
+                        "view"
                       ]
                     : [
                         "view"
