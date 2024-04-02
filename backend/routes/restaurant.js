@@ -9,7 +9,9 @@ const {
   getItemByResBranchId,
   maintenance,
   maintenance_restaurant,
-  editRestaurantInfo
+  editRestaurantInfo,
+  deleteRestaurant,
+  editmenutInfo
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -27,7 +29,14 @@ restaurantRouter.put(
   authorization("manage"),
   editRestaurantInfo
 );
+restaurantRouter.put(
+  "/branch/delete/:id",
+  authentication,
+  authorization("manage"),
+  deleteRestaurant
+);
 restaurantRouter.post("/item", authentication, authorization("manage"), menu);
+restaurantRouter.put("/item/edit", authentication, authorization("manage"), editmenutInfo);
 restaurantRouter.post(
   "/menu",
   authentication,

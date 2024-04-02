@@ -38,80 +38,74 @@ const addRestaurant = async (req, res) => {
 };
 // ! to edit branch information
 const editRestaurantInfo = async (req, res) => {
-    const {id} = req.params;
-    const {
-      restaurant_Name,
-      Phone,
-      Street_name,
-      start_time,
-      end_time,
-      nearby_landmarks,
-      active,
-      is_deleted
-    } = req.body;
-  
-    const query = `UPDATE restaurant
+  const { id } = req.params;
+  const {
+    restaurant_Name,
+    Phone,
+    Street_name,
+    start_time,
+    end_time,
+    nearby_landmarks,
+    active,
+    is_deleted,
+  } = req.body;
+
+  const query = `UPDATE restaurant
     SET restaurant_Name = $1 , Phone = $2 , Street_name = $3 , start_time = $4 ,  end_time = $5 , nearby_landmarks = $6 , active = $7 , is_deleted = $8
     WHERE restaurant_id = $9;`;
-    const data = [
-      restaurant_Name,
-      Phone,
-      Street_name,
-      start_time,
-      end_time,
-      nearby_landmarks,
-      active,
-      is_deleted,
-      id
-    ];
-    pool
-      .query(query, data)
-      .then((result) => {
-        res.status(200).json({
-          success: true,
-          message: "restaurant updated successfully",
-          result:result.rows
-        });
-      })
-      .catch((err) => {
-        res.status(500).json({
-          success: false,
-          message: "Server",
-          err,
-        });
+  const data = [
+    restaurant_Name,
+    Phone,
+    Street_name,
+    start_time,
+    end_time,
+    nearby_landmarks,
+    active,
+    is_deleted,
+    id,
+  ];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "restaurant updated successfully",
+        result: result.rows,
       });
-  };
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server",
+        err,
+      });
+    });
+};
 
 // ! to DELETE branch information (soft delete)
 const deleteRestaurant = async (req, res) => {
-    const {id} = req.params;
-    const { 
-      is_deleted
-    } = req.body;
-  
-    const query = `UPDATE restaurant
-    SET is_deleted = $1
-    WHERE restaurant_id = $2;`;
-    const data = [ 
-      is_deleted,
-      id
-    ];
-    pool
-      .query(query, data)
-      .then((result) => {
-        res.status(200).json({
-          success: true,
-          message: "restaurant deleted successfully",
-        });
-      })
-      .catch((err) => {
-        res.status(500).json({
-          success: false,
-          message: "Server",
-          err,
-        });
+  const { id } = req.params;
+
+  const query = `UPDATE restaurant
+    SET is_deleted = 1
+    WHERE restaurant_id = $1;`;
+  const data = [id];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "restaurant deleted successfully",
       });
-  };
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server",
+        err,
+      });
+    });
+};
 
 //! to add new item in menu
 const menu = async (req, res) => {
@@ -132,6 +126,30 @@ const menu = async (req, res) => {
       res.status(409).json({
         success: false,
         message: "Server Error",
+        err,
+      });
+    });
+};
+// ! to edit menu information
+const editmenutInfo = async (req, res) => {
+  const { item, description, price, serving_time, menu_id } = req.body;
+
+  const query = `UPDATE menu
+    SET item = $1 , description = $2 , price = $3 , serving_time = $4  
+    WHERE menu_id = $5;`;
+  const data = [item, description, price, serving_time, menu_id];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "menu updated successfully"
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server",
         err,
       });
     });
@@ -208,7 +226,7 @@ const getAllRestaurantbranchById = (req, res) => {
       });
     });
 };
-//! to get all information about restaurant 
+//! to get all information about restaurant
 const getItemByResBranchId = (req, res) => {
   const { id } = req.params;
   const query = `
@@ -262,7 +280,7 @@ const getItemByResBranchId = (req, res) => {
       });
     });
 };
-//! to fill maintenance form 
+//! to fill maintenance form
 const maintenance = async (req, res) => {
   const {
     maintenance_date,
@@ -301,7 +319,7 @@ const maintenance = async (req, res) => {
       });
     });
 };
-//! to get all information about restaurant and maintenance 
+//! to get all information about restaurant and maintenance
 const maintenance_restaurant = (req, res) => {
   const { id } = req.params;
   const query = `
@@ -331,13 +349,11 @@ const maintenance_restaurant = (req, res) => {
   pool
     .query(query, [id])
     .then((result) => {
-    
-        res.status(200).json({
-          success: true,
-          message: "getting successfully",
-          result: result.rows,
-        });
-    
+      res.status(200).json({
+        success: true,
+        message: "getting successfully",
+        result: result.rows,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -359,5 +375,6 @@ module.exports = {
   maintenance,
   maintenance_restaurant,
   editRestaurantInfo,
-  deleteRestaurant
+  deleteRestaurant,
+  editmenutInfo
 };
