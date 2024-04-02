@@ -154,6 +154,30 @@ const editmenutInfo = async (req, res) => {
       });
     });
 };
+// ! to delete menu item(soft delete)
+const deleteMenuItem = async (req, res) => {
+  const { menu_id } = req.body;
+
+  const query = `UPDATE menu
+    SET is_delete = 1  
+    WHERE menu_id = $1;`;
+  const data = [menu_id];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "menu deleted successfully"
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server",
+        err,
+      });
+    });
+};
 //! to bind restaurant with menu
 const restaurant_menu = async (req, res) => {
   const { restaurant_id, menu_id } = req.body;

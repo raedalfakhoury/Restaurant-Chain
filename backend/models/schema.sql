@@ -43,7 +43,8 @@ CREATE TABLE menu (
   item  VARCHAR(255) ,
   description VARCHAR(255) ,
   price DOUBLE PRECISION ,
-  serving_time VARCHAR(255) 
+  serving_time VARCHAR(255) ,
+  is_delete INT DEFAULT 0
 );
 
  -- Create a table restaurant_menu
