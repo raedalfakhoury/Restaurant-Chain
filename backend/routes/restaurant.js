@@ -11,7 +11,8 @@ const {
   maintenance_restaurant,
   editRestaurantInfo,
   deleteRestaurant,
-  editmenutInfo
+  editmenutInfo,
+  deleteMenuItem
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -36,7 +37,11 @@ restaurantRouter.put(
   deleteRestaurant
 );
 restaurantRouter.post("/item", authentication, authorization("manage"), menu);
+
 restaurantRouter.put("/item/edit", authentication, authorization("manage"), editmenutInfo);
+
+restaurantRouter.put("/item/delete", authentication, authorization("manage"), deleteMenuItem);
+
 restaurantRouter.post(
   "/menu",
   authentication,

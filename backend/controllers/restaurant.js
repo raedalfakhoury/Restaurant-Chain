@@ -131,7 +131,7 @@ const menu = async (req, res) => {
     });
 };
 // ! to edit menu information
-const editmenutInfo = async (req, res) => {
+const editmenutInfo =  (req, res) => {
   const { item, description, price, serving_time, menu_id } = req.body;
 
   const query = `UPDATE menu
@@ -155,11 +155,11 @@ const editmenutInfo = async (req, res) => {
     });
 };
 // ! to delete menu item(soft delete)
-const deleteMenuItem = async (req, res) => {
+const deleteMenuItem = (req, res) => {
   const { menu_id } = req.body;
 
   const query = `UPDATE menu
-    SET is_delete = 1  
+    SET is_deleted = 1  
     WHERE menu_id = $1;`;
   const data = [menu_id];
   pool
@@ -343,6 +343,48 @@ const maintenance = async (req, res) => {
       });
     });
 };
+//! to edit maintenance form
+const editMaintenance = (req, res) => {
+  const {
+    maintenance_date,
+    Labour_Number,
+    Labor_Rate_Per_day,
+    material_cost,
+    impact,
+    comments,
+    restaurant_id,
+  } = req.body;
+
+  const query = `UPDATE maintenance
+  SET maintenance_date = $1 , Labour_Number = $2 , Labor_Rate_Per_day = $3 , material_cost = $4 ,  impact = $5 , comments = $6 , restaurant_id = $7  
+  WHERE maintenance_id = $8;`;
+  const data = [
+    maintenance_date,
+    Labour_Number,
+    Labor_Rate_Per_day,
+    material_cost,
+    impact,
+    comments,
+    restaurant_id,
+  ];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "maintenance updated successfully" 
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
+
+
 //! to get all information about restaurant and maintenance
 const maintenance_restaurant = (req, res) => {
   const { id } = req.params;
@@ -400,5 +442,6 @@ module.exports = {
   maintenance_restaurant,
   editRestaurantInfo,
   deleteRestaurant,
-  editmenutInfo
+  editmenutInfo,
+  deleteMenuItem
 };
