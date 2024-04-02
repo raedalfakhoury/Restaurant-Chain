@@ -6,7 +6,8 @@ const {
   restaurant_menu,
   getAllRestaurantbranch,
   getAllRestaurantbranchById,
-  getItemByResBranchId
+  getItemByResBranchId,
+  maintenance
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -24,6 +25,12 @@ restaurantRouter.post(
   authentication,
   authorization("manage"),
   restaurant_menu
+);
+restaurantRouter.post(
+  "/maintenance",
+  authentication,
+  authorization("manage"),
+  maintenance
 );
 restaurantRouter.get(
   "/",

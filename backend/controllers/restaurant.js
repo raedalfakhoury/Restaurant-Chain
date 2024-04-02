@@ -1,17 +1,23 @@
 const pool = require("../models/db");
- 
+
 const addRestaurant = async (req, res) => {
-  const { restaurant_Name, Phone, Street_name,start_time,end_time,nearby_landmarks } =
-    req.body; 
-  
-  const query = `INSERT INTO restaurant (restaurant_Name, Phone, Street_name,start_time,end_time,nearby_landmarks) VALUES ($1,$2,$3,$4,$5,$6)`;
-  const data = [
+  const {
     restaurant_Name,
-    Phone, 
+    Phone,
     Street_name,
     start_time,
     end_time,
-    nearby_landmarks
+    nearby_landmarks,
+  } = req.body;
+
+  const query = `INSERT INTO restaurant (restaurant_Name, Phone, Street_name,start_time,end_time,nearby_landmarks) VALUES ($1,$2,$3,$4,$5,$6)`;
+  const data = [
+    restaurant_Name,
+    Phone,
+    Street_name,
+    start_time,
+    end_time,
+    nearby_landmarks,
   ];
   pool
     .query(query, data)
@@ -19,7 +25,7 @@ const addRestaurant = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "restaurant created successfully",
-        result:result.rows[0]
+        result: result.rows[0],
       });
     })
     .catch((err) => {
@@ -31,23 +37,17 @@ const addRestaurant = async (req, res) => {
     });
 };
 const menu = async (req, res) => {
-  const { item, description ,price ,serving_time} =
-    req.body; 
-  
+  const { item, description, price, serving_time } = req.body;
+
   const query = `INSERT INTO menu (item, description,price,serving_time) VALUES ($1,$2,$3,$4)`;
-  const data = [
-    item,
-    description,
-    price,
-    serving_time
-  ];
+  const data = [item, description, price, serving_time];
   pool
     .query(query, data)
     .then((result) => {
       res.status(200).json({
         success: true,
         message: "menu created successfully",
-        result:result.rows[0]
+        result: result.rows[0],
       });
     })
     .catch((err) => {
@@ -59,85 +59,78 @@ const menu = async (req, res) => {
     });
 };
 const restaurant_menu = async (req, res) => {
-    const { restaurant_id, menu_id  } =
-      req.body; 
-    
-    const query = `INSERT INTO restaurant_menu (restaurant_id, menu_id) VALUES ($1,$2)`;
-    const data = [
-        restaurant_id,
-      menu_id
-    ];
-    pool
-      .query(query, data)
-      .then((result) => {
-        res.status(200).json({
-          success: true,
-          message: " created successfully",
-          result:result.rows[0]
-        });
-      })
-      .catch((err) => {
-        res.status(409).json({
-          success: false,
-          message: "Server Error",
-          err,
-        });
-      });
-  };
+  const { restaurant_id, menu_id } = req.body;
 
-
-const getAllRestaurantbranch =  (req,res) => {
-    
-    const query = `SELECT * FROM restaurant `;
-    
-    pool
-      .query(query)
-      .then((result) => {
-        res.status(200).json({
-          success: true,
-          message: "successfully",
-          result:result.rows
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(409).json({
-          success: false,
-          message: "Server Error",
-          err,
-        });
+  const query = `INSERT INTO restaurant_menu (restaurant_id, menu_id) VALUES ($1,$2)`;
+  const data = [restaurant_id, menu_id];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: " created successfully",
+        result: result.rows[0],
       });
-  };
-const getAllRestaurantbranchById =  (req,res) => {
-    const {id} = req.params;
-    const query = `SELECT * FROM restaurant WHERE restaurant_id = $1`;
-    
-    pool
-      .query(query,[id])
-      .then((result) => {
-        if (result.rowCount) {
-            res.status(200).json({
+    })
+    .catch((err) => {
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
+
+const getAllRestaurantbranch = (req, res) => {
+  const query = `SELECT * FROM restaurant `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
+const getAllRestaurantbranchById = (req, res) => {
+  const { id } = req.params;
+  const query = `SELECT * FROM restaurant WHERE restaurant_id = $1`;
+
+  pool
+    .query(query, [id])
+    .then((result) => {
+      if (result.rowCount) {
+        res.status(200).json({
           success: true,
           message: "branch getting successfully",
-          result:result.rows
+          result: result.rows,
         });
-        }else{
-            throw Error
-        }
-        
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(409).json({
-          success: false,
-          message: "Server Error",
-          err,
-        });
+      } else {
+        throw Error;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
       });
-  };
-  const getItemByResBranchId =  (req,res) => {
-    const {id} = req.params;
-    const query = `
+    });
+};
+const getItemByResBranchId = (req, res) => {
+  const { id } = req.params;
+  const query = `
     SELECT DISTINCT
     restaurant.restaurant_id,
     menu.menu_id,
@@ -163,38 +156,79 @@ const getAllRestaurantbranchById =  (req,res) => {
 
      WHERE restaurant.restaurant_id = $1
     
-  `; 
-    pool
-      .query(query,[id])
-      .then((result) => {
-        if (result.rowCount) {
-            res.status(200).json({
+  `;
+  pool
+    .query(query, [id])
+    .then((result) => {
+      if (result.rowCount) {
+        res.status(200).json({
           success: true,
           message: "branch getting successfully",
-          result:result.rows
+          result: result.rows,
         });
-        }else{
-            res.status(200).json({
-                success: true,
-                message: "Please Add Menu",
-              });
-        }
-      })
-      .catch((err) => {
-         console.log(err);
-        res.status(409).json({
-          success: false,
-          message: "Server Error",
-          err,
+      } else {
+        res.status(200).json({
+          success: true,
+          message: "Please Add Menu",
         });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
       });
-  };
- 
+    });
+};
+
+const maintenance = async (req, res) => {
+   
+  const {
+    maintenance_date,
+    Labour_Number,
+    Labor_Rate_Per_day,
+    material_cost,
+    impact,
+    comments,
+    restaurant_id,
+  } = req.body;
+
+  const query = `INSERT INTO maintenance (maintenance_date, Labour_Number, Labor_Rate_Per_day,material_cost,impact,comments,restaurant_id) VALUES ($1,$2,$3,$4,$5,$6,$7)`;
+  const data = [
+    maintenance_date,
+    Labour_Number,
+    Labor_Rate_Per_day,
+    material_cost,
+    impact,
+    comments,
+    restaurant_id,
+  ];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "maintenance created successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
+
 module.exports = {
-    addRestaurant ,
-    menu,
-    restaurant_menu,
-    getAllRestaurantbranch,
-    getAllRestaurantbranchById,
-    getItemByResBranchId
+  addRestaurant,
+  menu,
+  restaurant_menu,
+  getAllRestaurantbranch,
+  getAllRestaurantbranchById,
+  getItemByResBranchId,
+  maintenance
 };

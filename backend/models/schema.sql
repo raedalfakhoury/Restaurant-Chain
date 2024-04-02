@@ -52,3 +52,15 @@ CREATE TABLE restaurant_menu (
   FOREIGN KEY (restaurant_id) REFERENCES restaurant (restaurant_id),
   FOREIGN KEY (menu_id) REFERENCES menu (menu_id)
 );
+ -- Create a table maintenance 
+CREATE TABLE maintenance (
+  maintenance_id SERIAL PRIMARY KEY,
+  maintenance_date VARCHAR(255) ,
+  Labour_Number INT ,
+  Labor_Rate_Per_day INT ,
+  material_cost DOUBLE PRECISION ,
+  impact VARCHAR(255) ,
+  comments VARCHAR(255) ,
+  restaurant_id INT , 
+  FOREIGN KEY (restaurant_id) REFERENCES restaurant (restaurant_id) 
+);
