@@ -7,7 +7,9 @@ const {
   getAllRestaurantbranch,
   getAllRestaurantbranchById,
   getItemByResBranchId,
-  maintenance
+  maintenance,
+  maintenance_restaurant,
+  editRestaurantInfo
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -18,6 +20,12 @@ restaurantRouter.post(
   authentication,
   authorization("manage"),
   addRestaurant
+);
+restaurantRouter.put(
+  "/branch/edit/:id",
+  authentication,
+  authorization("manage"),
+  editRestaurantInfo
 );
 restaurantRouter.post("/item", authentication, authorization("manage"), menu);
 restaurantRouter.post(
@@ -31,6 +39,12 @@ restaurantRouter.post(
   authentication,
   authorization("manage"),
   maintenance
+);
+restaurantRouter.get(
+  "/maintenance_res/:id",
+  authentication,
+  authorization("manage"),
+  maintenance_restaurant
 );
 restaurantRouter.get(
   "/",

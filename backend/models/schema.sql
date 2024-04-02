@@ -33,7 +33,9 @@ CREATE TABLE restaurant (
   start_time  VARCHAR(255) ,
   end_time  VARCHAR(255) , 
   nearby_landmarks VARCHAR(255) ,
-  active INT DEFAULT 0
+  active INT DEFAULT 0,
+  is_deleted INT DEFAULT 0
+
 );
  -- Create a table menu
 CREATE TABLE menu (
