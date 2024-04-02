@@ -31,14 +31,15 @@ const addRestaurant = async (req, res) => {
     });
 };
 const menu = async (req, res) => {
-  const { item, description ,price } =
+  const { item, description ,price ,serving_time} =
     req.body; 
   
-  const query = `INSERT INTO menu (item, description,price) VALUES ($1,$2,$3)`;
+  const query = `INSERT INTO menu (item, description,price,serving_time) VALUES ($1,$2,$3,$4)`;
   const data = [
     item,
     description,
-    price
+    price,
+    serving_time
   ];
   pool
     .query(query, data)
@@ -150,7 +151,8 @@ const getAllRestaurantbranchById =  (req,res) => {
     restaurant.active,
    menu.item,
    menu.description,
-   menu.price
+   menu.price,
+   menu.serving_time
     FROM
     restaurant_menu 
     JOIN

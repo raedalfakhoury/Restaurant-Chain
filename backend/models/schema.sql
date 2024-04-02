@@ -40,7 +40,8 @@ CREATE TABLE menu (
   menu_id SERIAL PRIMARY KEY,
   item  VARCHAR(255) ,
   description VARCHAR(255) ,
-  price DOUBLE PRECISION 
+  price DOUBLE PRECISION ,
+  serving_time VARCHAR(255) 
 );
 
  -- Create a table restaurant_menu
@@ -48,6 +49,6 @@ CREATE TABLE restaurant_menu (
   restaurant_menu_id SERIAL PRIMARY KEY,
   restaurant_id INT ,
   menu_id INT , 
-  FOREIGN KEY (restaurant_id) REFERENCES restaurant (restaurant_id)
+  FOREIGN KEY (restaurant_id) REFERENCES restaurant (restaurant_id),
   FOREIGN KEY (menu_id) REFERENCES menu (menu_id)
 );
