@@ -21,8 +21,8 @@ const restaurantRouter = express.Router();
 
 restaurantRouter.post(
   "/add",
-  authentication,
-  authorization("manage"),
+  // authentication,
+  // authorization("manage"),
   addRestaurant
 );
 restaurantRouter.put(

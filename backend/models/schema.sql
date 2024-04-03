@@ -27,12 +27,12 @@ CREATE TABLE permissions (
  -- Create a table resturant
 CREATE TABLE restaurant (
   restaurant_id SERIAL PRIMARY KEY,
-	restaurant_Name  VARCHAR(255) ,
-  Phone  VARCHAR(255) , 
-  Street_name VARCHAR(255) ,
-  start_time  VARCHAR(255) ,
-  end_time  VARCHAR(255) , 
-  nearby_landmarks VARCHAR(255) ,
+	restaurant_Name  VARCHAR(255) NOT NULL,
+  Phone  VARCHAR(255) NOT NULL, 
+  Street_name VARCHAR(255) NOT NULL,
+  start_time  VARCHAR(255) NOT NULL,
+  end_time  VARCHAR(255) NOT NULL, 
+  nearby_landmarks VARCHAR(255) NOT NULL,
   active INT DEFAULT 0,
   is_deleted INT DEFAULT 0
 
