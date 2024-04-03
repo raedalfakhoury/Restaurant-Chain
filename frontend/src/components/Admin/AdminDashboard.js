@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
@@ -106,8 +107,36 @@ const AdminDashboard = () => {
         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
       >
         <Toolbar />
-        <Typography paragraph>
-      
+        <Typography paragraph sx={{ flexGrow: 1,width:"100%" ,display:"flex",justifyContent:"center"}}>
+        <div class="card-container">
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <div class="container">
+        <div class="log-card">
+    <div className="center"><p class="heading">Add New Branch</p> </div>
+
+    <div class="input-group">
+        <p class="text">Restaurant Name</p>
+        <input class="input" type="username"  />
+        <p class="text">Phone</p>
+        <input class="input" type="tel" />
+        <p class="text">Street Name</p>
+        <input class="input" type="text"/>
+        <p class="text">Start Time</p>
+        <input class="input" type="text"/>
+        <p class="text">End Time</p>
+        <input class="input" type="text"/>
+        <p class="text">Nearby Landmarks</p>
+        <input class="input" type="text"/>
+    </div>
+
+    
+
+    <div className="create"><button class="btn">Create</button> </div>
+</div>
+    </div>
+</div>
+
  
   
         </Typography>
