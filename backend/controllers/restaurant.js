@@ -353,6 +353,7 @@ const editMaintenance = (req, res) => {
     impact,
     comments,
     restaurant_id,
+    maintenance_id
   } = req.body;
 
   const query = `UPDATE maintenance
@@ -366,6 +367,7 @@ const editMaintenance = (req, res) => {
     impact,
     comments,
     restaurant_id,
+    maintenance_id
   ];
   pool
     .query(query, data)
@@ -375,7 +377,7 @@ const editMaintenance = (req, res) => {
         message: "maintenance updated successfully" 
       });
     })
-    .catch((err) => {
+    .catch((err) => { 
       res.status(500).json({
         success: false,
         message: "Server Error",
@@ -389,8 +391,8 @@ const editMaintenance = (req, res) => {
 const maintenance_restaurant = (req, res) => {
   const { id } = req.params;
   const query = `
-      SELECT DISTINCT
-      restaurant.restaurant_id,
+  SELECT DISTINCT
+  restaurant.restaurant_id,
       restaurant.restaurant_name,
       restaurant.phone,
       restaurant.street_name,
@@ -443,5 +445,6 @@ module.exports = {
   editRestaurantInfo,
   deleteRestaurant,
   editmenutInfo,
-  deleteMenuItem
+  deleteMenuItem,
+  editMaintenance
 };
