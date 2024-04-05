@@ -1,6 +1,32 @@
 .custom-header {
-    color: red; 
-    font-size: 15px;
-    font-weight: 700;
-  }
-  
+  background-color: #1976D2;  
+  color: white; 
+  font-weight: 700;
+}
+
+.custom-cell {
+  background-color: #f0f0f0; /* Change to your desired color */
+  color: #333; /* Change to your desired color */
+}
+.css-1ylal4q {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 450px;
+  background-color: #fff;
+  border: 2px solid #000;
+  box-shadow: 0px 11px 15px -7px rgba(0,0,0,0.2), 0px 24px 38px 3px rgba(0,0,0,0.14), 0px 9px 46px 8px rgba(0,0,0,0.12);
+  padding: 4px;
+}
+.container2 {
+  display: flex;
+  height: 70%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+

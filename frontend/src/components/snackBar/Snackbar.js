@@ -36,7 +36,7 @@ export default function CustomizedSnackbars({open,setOpen,text,status}) {
   return (
     
      
-    <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}  action={action}>
+    <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}  action={action}>
         <Alert
         
           severity={status}
