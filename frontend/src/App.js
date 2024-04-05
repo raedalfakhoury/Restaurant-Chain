@@ -1,28 +1,16 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet, RouterProvider } from "react-router-dom";
 import React, { createContext } from "react"; 
-import AdminDashboard from "./components/Admin/AdminDashboard";
+import AdminDashboard from "./components/page/Admin/AdminDashboard";
+import { Main } from "./components/page/Admin/Main";
+import {  routers } from "./components/Routes";
 export const ApplicationContext = createContext();
 
 //===============================================================
 
 const App = () => { 
 
-  return (
-    <ApplicationContext.Provider
-      value={{
-        
-      }}
-    > 
-        <Routes>
-          
-         
-        <Route path="/Admin" element={<AdminDashboard/>} />
-           
-        </Routes>
-     
-    </ApplicationContext.Provider>
-  );
+  return   <RouterProvider router={routers} />;
 };
 
 export default App;
