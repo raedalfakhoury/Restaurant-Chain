@@ -3,11 +3,17 @@ import AdminDashboard from "../page/Admin/AdminDashboard";
 import { Main } from "../page/Admin/Main";
 import AddBranch from "../page/Admin/AddBranch";
 import Menu from "../page/Admin/Menu/Menu";
+import { Details } from "../page/Admin/Details/Details";
 
 
 
 
 export const routers = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Details/>,
+     
+  },
     {
       path: "/",
       element: <AdminDashboard/>,
@@ -21,6 +27,10 @@ export const routers = createBrowserRouter([
           element: <AddBranch/>,
         },
         {
+          path: "details",
+          element: <Details/>,
+        },
+        {
           path: "add-menu",
           element: <Menu/>,
         },
@@ -29,6 +39,7 @@ export const routers = createBrowserRouter([
        
       ],
     },
+   
   ]);
   
   

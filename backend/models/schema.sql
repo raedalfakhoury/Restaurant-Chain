@@ -29,21 +29,21 @@ CREATE TABLE restaurant (
   restaurant_id SERIAL PRIMARY KEY,
 	restaurant_Name  VARCHAR(255) NOT NULL,
   Phone  VARCHAR(255) NOT NULL, 
-  Street_name VARCHAR(255) NOT NULL,
-  start_time  VARCHAR(255) NOT NULL,
-  end_time  VARCHAR(255) NOT NULL, 
-  nearby_landmarks VARCHAR(255) NOT NULL,
-  active INT DEFAULT 0,
+  Street_name VARCHAR(255)  NOT NULL,
+  start_time  VARCHAR(255) DEFAULT '8:00 AM' NOT NULL,
+  end_time  VARCHAR(255) DEFAULT '5:30 PM' NOT NULL, 
+  nearby_landmarks VARCHAR(255) UNIQUE NOT NULL,
   is_deleted INT DEFAULT 0
 
 );
  -- Create a table menu
 CREATE TABLE menu (
   menu_id SERIAL PRIMARY KEY,
-  item  VARCHAR(255) ,
-  description VARCHAR(255) ,
-  price DOUBLE PRECISION ,
-  serving_time VARCHAR(255) ,
+  item  VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  price DOUBLE PRECISION NOT NULL,
+ start_time  VARCHAR(255) DEFAULT '8:00 AM' NOT NULL,
+  end_time  VARCHAR(255) DEFAULT '5:30 PM' NOT NULL, 
   is_delete INT DEFAULT 0
 );
 
@@ -58,12 +58,15 @@ CREATE TABLE restaurant_menu (
  -- Create a table maintenance 
 CREATE TABLE maintenance (
   maintenance_id SERIAL PRIMARY KEY,
-  maintenance_date VARCHAR(255) ,
-  Labour_Number INT ,
-  Labor_Rate_Per_day INT ,
-  material_cost DOUBLE PRECISION ,
-  impact VARCHAR(255) ,
-  comments VARCHAR(255) ,
-  restaurant_id INT , 
+  start_maintenance_date DATE NOT NULL,
+  end_maintenance_date DATE NOT NULL,
+  Labour_Number INT NOT NULL,
+  Labor_Rate_Per_day INT NOT NULL,
+  material_cost DOUBLE PRECISION DEFAULT 0,
+  comments VARCHAR(255) DEFAULT 'NONE', 
+  restaurant_id INT,
+  impact VARCHAR(255) DEFAULT 'NONE',
+  is_delete INT DEFAULT 0
   FOREIGN KEY (restaurant_id) REFERENCES restaurant (restaurant_id) 
 );
+

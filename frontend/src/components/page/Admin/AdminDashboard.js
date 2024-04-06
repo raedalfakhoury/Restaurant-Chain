@@ -16,8 +16,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { PhGitBranch, PhSquaresFour } from "../../Icon/Icon";
+import { PhGitBranch} from "../../Icon/Icon";
+import DetailsIcon from '@mui/icons-material/Details';
 import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantOutlined";
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Outlet } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -27,8 +29,9 @@ const AdminDashboard = () => {
 
   const icons = [
     { title: "All Branch", icon: <RestaurantOutlinedIcon />, path: "main" },
+    { title: "Maintenance Details", icon: <DetailsIcon />, path: "details" },
     { title: "Add Branch", icon: <PhGitBranch />, path: "add-branch" },
-    { title: "Add menu", icon: <PhSquaresFour />, path: "add-menu" },
+    { title: "Add menu", icon: <MenuBookIcon />, path: "add-menu" },
   ];
 
   return (

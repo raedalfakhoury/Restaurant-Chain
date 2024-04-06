@@ -38,7 +38,6 @@ const addRestaurant = async (req, res) => {
 };
 // ! to edit branch information
 const editRestaurantInfo = async (req, res) => {
-  const { id } = req.params;
   const {
     restaurant_Name,
     Phone,
@@ -46,13 +45,12 @@ const editRestaurantInfo = async (req, res) => {
     start_time,
     end_time,
     nearby_landmarks,
-    active,
-    is_deleted,
+    restaurant_id,
   } = req.body;
 
   const query = `UPDATE restaurant
-    SET restaurant_Name = $1 , Phone = $2 , Street_name = $3 , start_time = $4 ,  end_time = $5 , nearby_landmarks = $6 , active = $7 , is_deleted = $8
-    WHERE restaurant_id = $9;`;
+    SET restaurant_Name = $1 , Phone = $2 , Street_name = $3 , start_time = $4 ,  end_time = $5 , nearby_landmarks = $6 
+    WHERE restaurant_id = $7;`;
   const data = [
     restaurant_Name,
     Phone,
@@ -60,9 +58,7 @@ const editRestaurantInfo = async (req, res) => {
     start_time,
     end_time,
     nearby_landmarks,
-    active,
-    is_deleted,
-    id,
+    restaurant_id,
   ];
   pool
     .query(query, data)
@@ -70,7 +66,6 @@ const editRestaurantInfo = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "restaurant updated successfully",
-        result: result.rows,
       });
     })
     .catch((err) => {
@@ -83,7 +78,7 @@ const editRestaurantInfo = async (req, res) => {
 };
 
 // ! to DELETE branch information (soft delete)
-const deleteRestaurant = async (req, res) => {
+const deleteRestaurant = (req, res) => {
   const { id } = req.params;
 
   const query = `UPDATE restaurant
@@ -109,17 +104,16 @@ const deleteRestaurant = async (req, res) => {
 
 //! to add new item in menu
 const menu = async (req, res) => {
-  const { item, description, price, serving_time } = req.body;
+  const { item, description, price, start_time, end_time } = req.body;
 
-  const query = `INSERT INTO menu (item, description,price,serving_time) VALUES ($1,$2,$3,$4)`;
-  const data = [item, description, price, serving_time];
+  const query = `INSERT INTO menu (item, description,price, start_time , end_time) VALUES ($1,$2,$3,$4,$5)`;
+  const data = [item, description, price, start_time, end_time];
   pool
     .query(query, data)
     .then((result) => {
       res.status(200).json({
         success: true,
         message: "menu created successfully",
-        result: result.rows[0],
       });
     })
     .catch((err) => {
@@ -131,7 +125,7 @@ const menu = async (req, res) => {
     });
 };
 // ! to edit menu information
-const editmenutInfo =  (req, res) => {
+const editmenutInfo = (req, res) => {
   const { item, description, price, serving_time, menu_id } = req.body;
 
   const query = `UPDATE menu
@@ -143,7 +137,7 @@ const editmenutInfo =  (req, res) => {
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "menu updated successfully"
+        message: "menu updated successfully",
       });
     })
     .catch((err) => {
@@ -167,7 +161,7 @@ const deleteMenuItem = (req, res) => {
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "menu deleted successfully"
+        message: "menu deleted successfully",
       });
     })
     .catch((err) => {
@@ -189,8 +183,7 @@ const restaurant_menu = async (req, res) => {
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: " created successfully",
-        result: result.rows[0],
+        message: "Added Successfully",
       });
     })
     .catch((err) => {
@@ -203,7 +196,29 @@ const restaurant_menu = async (req, res) => {
 };
 //! to get all restaurant branch
 const getAllRestaurantbranch = (req, res) => {
-  const query = `SELECT * FROM restaurant `;
+  const query = `SELECT * FROM restaurant WHERE is_deleted = 0`;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
+//! to get all menu
+const getMenu = (req, res) => {
+  const query = `SELECT * FROM menu WHERE is_delete = 0`;
 
   pool
     .query(query)
@@ -225,11 +240,11 @@ const getAllRestaurantbranch = (req, res) => {
 };
 //! to get restaurant branch by id
 const getAllRestaurantbranchById = (req, res) => {
-  const { id } = req.params;
+  const { restaurant_id } = req.params;
   const query = `SELECT * FROM restaurant WHERE restaurant_id = $1`;
 
   pool
-    .query(query, [id])
+    .query(query, [restaurant_id])
     .then((result) => {
       if (result.rowCount) {
         res.status(200).json({
@@ -254,29 +269,29 @@ const getAllRestaurantbranchById = (req, res) => {
 const getItemByResBranchId = (req, res) => {
   const { id } = req.params;
   const query = `
-    SELECT DISTINCT
-    restaurant.restaurant_id,
-    menu.menu_id,
-    restaurant.restaurant_name,
-    restaurant.phone,
-    restaurant.street_name,
-    restaurant.start_time,
-    restaurant.end_time,
-    restaurant.nearby_landmarks,
-    restaurant.active,
-   menu.item,
-   menu.description,
-   menu.price,
-   menu.serving_time
-    FROM
-    restaurant_menu 
-    JOIN
-    restaurant ON restaurant_menu.restaurant_id = restaurant.restaurant_id
-    
-    JOIN
-    menu ON restaurant_menu.menu_id = menu.menu_id
+  SELECT DISTINCT
+  restaurant.restaurant_id,
+  menu.menu_id,
+  restaurant.restaurant_name,
+  restaurant.phone,
+  restaurant.street_name,
+  restaurant.start_time,
+  restaurant.end_time,
+  restaurant.nearby_landmarks, 
+ menu.item,
+ menu.description,
+ menu.price,
+ menu.start_time,
+ menu.end_time,
+  FROM
+  restaurant_menu 
+  JOIN
+  restaurant ON restaurant_menu.restaurant_id = restaurant.restaurant_id
+  
+  JOIN
+  menu ON restaurant_menu.menu_id = menu.menu_id
 
-     WHERE restaurant.restaurant_id = $1
+   WHERE restaurant.restaurant_id = $1 ;
     
   `;
   pool
@@ -305,25 +320,28 @@ const getItemByResBranchId = (req, res) => {
     });
 };
 //! to fill maintenance form
-const maintenance = async (req, res) => {
+const maintenance = (req, res) => {
   const {
-    maintenance_date,
+    start_maintenance_date,
+    end_maintenance_date,
     Labour_Number,
     Labor_Rate_Per_day,
     material_cost,
-    impact,
     comments,
+    impact,
     restaurant_id,
   } = req.body;
 
-  const query = `INSERT INTO maintenance (maintenance_date, Labour_Number, Labor_Rate_Per_day,material_cost,impact,comments,restaurant_id) VALUES ($1,$2,$3,$4,$5,$6,$7)`;
+  const query = `INSERT INTO maintenance (start_maintenance_date,
+    end_maintenance_date, Labour_Number, Labor_Rate_Per_day, material_cost,comments,impact,restaurant_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`;
   const data = [
-    maintenance_date,
+    start_maintenance_date,
+    end_maintenance_date,
     Labour_Number,
     Labor_Rate_Per_day,
     material_cost,
-    impact,
     comments,
+    impact,
     restaurant_id,
   ];
   pool
@@ -332,7 +350,6 @@ const maintenance = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "maintenance created successfully",
-        result: result.rows,
       });
     })
     .catch((err) => {
@@ -353,7 +370,7 @@ const editMaintenance = (req, res) => {
     impact,
     comments,
     restaurant_id,
-    maintenance_id
+    maintenance_id,
   } = req.body;
 
   const query = `UPDATE maintenance
@@ -367,17 +384,17 @@ const editMaintenance = (req, res) => {
     impact,
     comments,
     restaurant_id,
-    maintenance_id
+    maintenance_id,
   ];
   pool
     .query(query, data)
     .then((result) => {
       res.status(200).json({
         success: true,
-        message: "maintenance updated successfully" 
+        message: "maintenance updated successfully",
       });
     })
-    .catch((err) => { 
+    .catch((err) => {
       res.status(500).json({
         success: false,
         message: "Server Error",
@@ -386,36 +403,35 @@ const editMaintenance = (req, res) => {
     });
 };
 
-
 //! to get all information about restaurant and maintenance
-const maintenance_restaurant = (req, res) => {
-  const { id } = req.params;
+const maintenance_restaurant = (req, res) => { 
   const query = `
-  SELECT DISTINCT
-  restaurant.restaurant_id,
-      restaurant.restaurant_name,
-      restaurant.phone,
-      restaurant.street_name,
-      restaurant.start_time,
-      restaurant.end_time,
-      restaurant.nearby_landmarks,
-      restaurant.active,
-      maintenance.maintenance_date,
-      maintenance.Labour_Number,
-      maintenance.Labor_Rate_Per_day,
-      maintenance.material_cost,
-      maintenance.impact,
-      maintenance.comments
-      FROM
-      maintenance 
-      JOIN
-      restaurant ON maintenance.restaurant_id = restaurant.restaurant_id
-  
-       WHERE restaurant.restaurant_id = $1
+  SELECT
+    restaurant.restaurant_id,
+    restaurant.restaurant_name,
+    restaurant.phone,
+    restaurant.street_name,
+    restaurant.start_time,
+    restaurant.end_time,
+    restaurant.nearby_landmarks,
+    maintenance.start_maintenance_date,
+    maintenance.end_maintenance_date,
+    maintenance.Labour_Number,
+    maintenance.Labor_Rate_Per_day,
+    maintenance.material_cost,
+    maintenance.impact,
+    maintenance.comments,
+    (  maintenance.end_maintenance_date - maintenance.start_maintenance_date) AS maintenance_duration,
+    (  (maintenance.end_maintenance_date - maintenance.start_maintenance_date) * maintenance.Labour_Number * maintenance.Labor_Rate_Per_day + maintenance.material_cost) AS cost
+FROM
+    maintenance
+JOIN
+    restaurant ON maintenance.restaurant_id = restaurant.restaurant_id
+WHERE restaurant.is_deleted = 0
       
     `;
   pool
-    .query(query, [id])
+    .query(query)
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -436,6 +452,7 @@ const maintenance_restaurant = (req, res) => {
 module.exports = {
   addRestaurant,
   menu,
+  getMenu,
   restaurant_menu,
   getAllRestaurantbranch,
   getAllRestaurantbranchById,
@@ -446,5 +463,5 @@ module.exports = {
   deleteRestaurant,
   editmenutInfo,
   deleteMenuItem,
-  editMaintenance
+  editMaintenance,
 };

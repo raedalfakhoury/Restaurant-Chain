@@ -3,6 +3,7 @@ const express = require("express");
 const {
   addRestaurant,
   menu,
+  getMenu,
   restaurant_menu,
   getAllRestaurantbranch,
   getAllRestaurantbranchById,
@@ -13,7 +14,7 @@ const {
   deleteRestaurant,
   editmenutInfo,
   deleteMenuItem,
-  editMaintenance
+  editMaintenance,
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -26,33 +27,53 @@ restaurantRouter.post(
   addRestaurant
 );
 restaurantRouter.put(
-  "/branch/edit/:id",
-  authentication,
-  authorization("manage"),
+  "/branch/editres",
+  // authentication,
+  // authorization("manage"),
   editRestaurantInfo
 );
 restaurantRouter.put(
-  "/branch/delete/:id",
-  authentication,
-  authorization("manage"),
+  "/restaurantBranch/delete/:id",
+  // authentication,
+  // authorization("manage"),
   deleteRestaurant
 );
-restaurantRouter.post("/item", authentication, authorization("manage"), menu);
+restaurantRouter.post("/item",
+//  authentication, authorization("manage"), 
+ menu);
 
-restaurantRouter.put("/item/edit", authentication, authorization("manage"), editmenutInfo);
+ restaurantRouter.get(
+  "/allmenu",
+  // authentication,
+  // authorization("manage"),
+  getMenu
+);
 
-restaurantRouter.put("/item/delete", authentication, authorization("manage"), deleteMenuItem);
+
+restaurantRouter.put(
+  "/item/edit",
+  authentication,
+  authorization("manage"),
+  editmenutInfo
+);
+
+restaurantRouter.put(
+  "/item/delete",
+  authentication,
+  authorization("manage"),
+  deleteMenuItem
+);
 
 restaurantRouter.post(
   "/menu",
-  authentication,
-  authorization("manage"),
+  // authentication,
+  // authorization("manage"),
   restaurant_menu
 );
 restaurantRouter.post(
-  "/maintenance",
-  authentication,
-  authorization("manage"),
+  "/maintenance/",
+  // authentication,
+  // authorization("manage"),
   maintenance
 );
 restaurantRouter.put(
@@ -62,21 +83,21 @@ restaurantRouter.put(
   editMaintenance
 );
 restaurantRouter.get(
-  "/maintenance_res/:id",
-  authentication,
-  authorization("manage"),
+  "/maintenance_res/",
+  // authentication,
+  // authorization("manage"),
   maintenance_restaurant
 );
 restaurantRouter.get(
   "/",
-  authentication,
-  authorization("view"),
+  // authentication,
+  // authorization("view"),
   getAllRestaurantbranch
 );
 restaurantRouter.get(
-  "/branch/:id",
-  authentication,
-  authorization("view"),
+  "/branch/:restaurant_id",
+  // authentication,
+  // authorization("view"),
   getAllRestaurantbranchById
 );
 restaurantRouter.get(

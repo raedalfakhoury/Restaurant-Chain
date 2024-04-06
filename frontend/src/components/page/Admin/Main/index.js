@@ -246,7 +246,7 @@ export const Main = () => {
                 nearby_landmarks: nearbyLandmarks,
               });
               console.log("place", placeHolderBranch);
-              handleOpenModalEdit()
+              handleOpenModalEdit();
             } catch (error) {
               console.log(error);
             }
@@ -696,10 +696,7 @@ export const Main = () => {
                                 setEditBranch((prevObject) => {
                                   return {
                                     ...prevObject,
-                                    start_time:
-                                      newValue.$H +
-                                      ":" +
-                                      (newValue.$m == "0" ? "00" : newValue.$m),
+                                    start_time: newValue,
                                   };
                                 })
                               }
@@ -714,10 +711,7 @@ export const Main = () => {
                                 setEditBranch((prevObject) => {
                                   return {
                                     ...prevObject,
-                                    end_time:
-                                      newValue.$H +
-                                      ":" +
-                                      (newValue.$m == "0" ? "00" : newValue.$m),
+                                    end_time: newValue,
                                   };
                                 })
                               }
@@ -767,7 +761,7 @@ export const Main = () => {
                                     getAllBranch();
                                   }
                                 })
-                                .catch((err) => { 
+                                .catch((err) => {
                                   console.log(err, "err");
                                   setSnackBarText("Server Error");
                                   setSnackBarStatus("error");
