@@ -4,6 +4,7 @@ import { Main } from "../page/Admin/Main";
 import AddBranch from "../page/Admin/AddBranch";
 import Menu from "../page/Admin/Menu/Menu";
 import { Details } from "../page/Admin/Details/Details";
+import Login from "../Login/Login";
 
 
 
@@ -11,7 +12,7 @@ import { Details } from "../page/Admin/Details/Details";
 export const routers = createBrowserRouter([
   {
     path: "/login",
-    element: <Details/>,
+    element: <Login/>,
      
   },
     {
