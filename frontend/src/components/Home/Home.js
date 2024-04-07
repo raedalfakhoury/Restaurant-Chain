@@ -173,8 +173,8 @@ const Home = () => {
               overflow: "auto",
             }}
           >
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <div className="leftRight">
+           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              { menu.length > 0   ? <div className="leftRight">
                 {menu?.map((item) => {
                   return (
                     <div className="img">
@@ -201,7 +201,11 @@ const Home = () => {
                     </div>
                   );
                 })}
-              </div>
+              </div> :
+              <div style={{display:"flex" , width:"100%" , justifyContent:"center"}}>
+             <h1 style={{width:"100%"}}>No Menu In This Branch</h1>
+            </div>
+              }
             </Typography>{" "}
           </Box>
         </Modal>
