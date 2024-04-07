@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import "../Home/Home.css";
 import axios from "axios";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import Button from "@mui/material/Button";
+import MenuBookIcon from "@mui/icons-material/MenuBook"; 
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Loader from "../Loader/Loader";
 
 const Home = () => {
   const [restaurant, setRestaurant] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [restaurant_id, setrestaurant_id] = useState({});
+  const [loader, setLoader] = useState(true);
   const [menu, setMenu] = useState([]);
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -23,8 +23,9 @@ const Home = () => {
       const result = await axios.get(
         "https://restaurant-chain.onrender.com/restaurant/details"
       );
-      console.log(result?.data?.result);
+
       setRestaurant(result?.data?.result);
+      setLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -64,92 +65,96 @@ const Home = () => {
         />
       </div>
 
-      <div
-        style={{
-          margin: "20px 0%",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "20px",
-        }}
-      >
-        {restaurant?.map((item) => {
-          console.log(item);
-          return (
-            <div class="card">
-              <div
-                class="top-section"
-                style={{
-                  backgroundImage:
-                    "url(https://crispychicken.rest/wp-content/uploads/2020/09/Arabic-english-logo-9001.png)",
-                  backgroundRepeat: "no-repeat",
-                }}
-              >
-                <div class="icons">
-                  <div class="logo">
-                    <img
-                      style={{ marginTop: "-13px" }}
-                      height="40px"
-                      width="40px"
-                      alt=""
-                      src="https://crispychicken.rest/wp-content/uploads/2020/09/Arabic-english-logo-9001.png"
-                    />
+      {loader ? (
+        <Loader />
+      ) : (
+        <div
+          style={{
+            margin: "20px 0%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "20px",
+          }}
+        >
+          {restaurant?.map((item) => {
+            console.log(item);
+            return (
+              <div class="card">
+                <div
+                  class="top-section"
+                  style={{
+                    backgroundImage:
+                      "url(https://crispychicken.rest/wp-content/uploads/2020/09/Arabic-english-logo-9001.png)",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                >
+                  <div class="icons">
+                    <div class="logo">
+                      <img
+                        style={{ marginTop: "-13px" }}
+                        height="40px"
+                        width="40px"
+                        alt=""
+                        src="https://crispychicken.rest/wp-content/uploads/2020/09/Arabic-english-logo-9001.png"
+                      />
+                    </div>
+                    <div
+                      class="social-media"
+                      onClick={() => {
+                        getmenuByRestaurantId(item.restaurant_id);
+                        handleOpenModal();
+                      }}
+                    >
+                      <MenuBookIcon
+                        className="menu"
+                        style={{ cursor: "pointer", fontSize: "40px" }}
+                        titleAccess="show menu"
+                      />
+                    </div>
                   </div>
-                  <div
-                    class="social-media"
-                    onClick={() => {
-                      getmenuByRestaurantId(item.restaurant_id);
-                      handleOpenModal();
-                    }}
+                </div>
+                <div class="bottom-section">
+                  <span class="title"> {item.street_name}</span>
+                  <span
+                    class="title"
+                    style={{ fontWeight: "400", marginTop: "5px" }}
                   >
-                    <MenuBookIcon
-                      className="menu"
-                      style={{ cursor: "pointer", fontSize: "40px" }}
-                      titleAccess="show menu"
-                    />
+                    {item.nearby_landmarks}
+                  </span>
+                  <span
+                    class="title"
+                    style={{ fontWeight: "400", marginTop: "5px" }}
+                  >
+                    {item.maintenance_impact === "Complete shutdown" ? (
+                      <p style={{ color: "red" }}>مغلق حاليا</p>
+                    ) : (
+                      ""
+                    )}
+                  </span>
+                  <div class="row row1">
+                    <div class="item">
+                      <span class="big-text">{item.restaurant_start_time}</span>
+                      <span class="regular-text">Open</span>
+                    </div>
+                    <div class="item">
+                      <span class="big-text">{item.restaurant_end_time}</span>
+                      <span class="regular-text">Close</span>
+                    </div>
+                    <div class="item">
+                      <span class="big-text">{item.phone}</span>
+                      <span class="regular-text">Phone</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="bottom-section">
-                <span class="title"> {item.street_name}</span>
-                <span
-                  class="title"
-                  style={{ fontWeight: "400", marginTop: "5px" }}
-                >
-                       {item.nearby_landmarks}
-                </span>
-                <span
-                  class="title"
-                  style={{ fontWeight: "400", marginTop: "5px" }}
-                >
-                  {item.maintenance_impact === "Complete shutdown" ? (
-                    <p style={{ color: "red" }}>مغلق حاليا</p>
-                  ) : (
-                    ""
-                  )}
-                </span>
-                <div class="row row1">
-                  <div class="item">
-                    <span class="big-text">{item.restaurant_start_time}</span>
-                    <span class="regular-text">Open</span>
-                  </div>
-                  <div class="item">
-                    <span class="big-text">{item.restaurant_end_time}</span>
-                    <span class="regular-text">Close</span>
-                  </div>
-                  <div class="item">
-                    <span class="big-text">{item.phone}</span>
-                    <span class="regular-text">Phone</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/*Modal for menu*/}
-      <div> 
+      <div>
         <Modal
           open={openModal}
           onClose={handleCloseModal}
