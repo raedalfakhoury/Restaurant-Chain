@@ -33,9 +33,7 @@ restaurantRouter.put(
   editRestaurantInfo
 );
 restaurantRouter.put(
-  "/restaurantBranch/delete/:id",
-  authentication,
-  authorization("manage"),
+  "/restaurantBranch/delete/:id", 
   deleteRestaurant
 );
 restaurantRouter.post("/item",

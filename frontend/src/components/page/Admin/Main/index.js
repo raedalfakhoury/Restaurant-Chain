@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect, useContext } from "react";
@@ -33,26 +34,34 @@ export const Main = () => {
   const [resMenuId, setResMenuId] = useState({});
   const [maintenanceInfo, setMaintenanceInfo] = useState({});
   const [placeHolderBranch, setPlaceHolderBranch] = useState({});
+ // for maintenance modal
+ const [openModal, setOpenModal] = useState(false);
+ // for edit branch modal
 
+ const [openModalEdit, setOpenModalEdit] = useState(false);
+ // for maintenance modal
   const getResId = async (id) => {
     try {
       const result = await axios.get(
-        `http://localhost:5000/restaurant/branch/${id}`
-      );
-      console.log(result.data.result, "resInfo");
+        `http://localhost:5000/restaurant/branch/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ); 
       setResMenuId({
         restaurant_id: result.data.result.restaurant_id,
-      });
-
+      }); 
       setPlaceHolderBranch({
-        restaurant_name: result.data.result.restaurant_name,
-        phone: result.data.result.phone,
-        street_name: result.data.result.street_name,
+        restaurant_Name: result.data.result.restaurant_name,
+        Phone: result.data.result.phone,
+        Street_name: result.data.result.street_name,
         start_time: result.data.result.start_time,
         end_time: result.data.result.end_time,
         nearby_landmarks: result.data.result.nearby_landmarks,
         restaurant_id: result.data.result.restaurant_id,
-      }); 
+      });
       handleOpenModalEdit();
     } catch (error) {
       console.log(error);
@@ -64,7 +73,12 @@ export const Main = () => {
     try {
       const result = await axios.put(
         "http://localhost:5000/restaurant/branch/editres",
-        placeHolderBranch
+        placeHolderBranch,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       handleCloseModalEdit();
 
@@ -74,21 +88,15 @@ export const Main = () => {
       setTimeout(() => {
         handleClickSnack();
       }, 500);
-    } catch (error) {
-      console.log(error, "err");
+    } catch (error) { 
       setSnackBarText("Server Error");
       setSnackBarStatus("error");
       handleClickSnack();
       handleCloseModalEdit();
     }
   };
-  const [editBranch, setEditBranch] = useState({});
-  // for maintenance modal
-  const [openModal, setOpenModal] = React.useState(false);
-  // for edit branch modal
-
-  const [openModalEdit, setOpenModalEdit] = React.useState(false);
-  // for maintenance modal
+  
+ 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -119,8 +127,7 @@ export const Main = () => {
 
   const getAllBranch = () => {
     axios
-      .get("http://localhost:5000/restaurant/",
-      {
+      .get("http://localhost:5000/restaurant/", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -161,27 +168,23 @@ export const Main = () => {
   const handleDeleteBranch = (restaurant_id) => {
     axios
       .put(
-        `http://localhost:5000/restaurant/restaurantBranch/delete/${restaurant_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `http://localhost:5000/restaurant/restaurantBranch/delete/${restaurant_id}`
       )
       .then((result) => {
         if (result.data.message === "restaurant deleted successfully") {
-          setSnackBarText("restaurant deleted successfully");
+          setSnackBarText("Restaurant deleted successfully");
           setSnackBarStatus("success");
         }
         getAllBranch();
         handleClickSnack();
-      })
+      }) 
       .catch((err) => {
         console.log(err);
         setSnackBarText("Server Error");
         setSnackBarStatus("error");
       });
   };
+  
 
   const columns = [
     {
@@ -285,8 +288,7 @@ export const Main = () => {
           aria-label="Add"
           style={{ width: "50px", color: "blue" }}
           onClick={async (e) => {
-            getResId(params.row.restaurant_id);
-            setEditBranch({ restaurant_id: params.row.restaurant_id });
+            getResId(params.row.restaurant_id); 
             e.preventDefault();
           }}
         >
@@ -358,12 +360,15 @@ export const Main = () => {
 
                     handleClose();
                     axios
-                      .post(`http://localhost:5000/restaurant/menu`, resMenuId ,
-                      {
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                      })
+                      .post(
+                        `http://localhost:5000/restaurant/menu`,
+                        resMenuId,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        }
+                      )
                       .then((result) => {
                         handleClickSnack();
                         if (result.data.message === "Added Successfully") {
@@ -694,13 +699,13 @@ export const Main = () => {
                         <p className="text">Restaurant Name</p>
                         <input
                           className="input"
-                          value={placeHolderBranch.restaurant_name}
+                          value={placeHolderBranch.restaurant_Name}
                           type="username"
                           onChange={(e) => {
                             setPlaceHolderBranch((prev) => {
                               return {
                                 ...prev,
-                                restaurant_name: e.target.value,
+                                restaurant_Name: e.target.value,
                               };
                             });
                           }}
@@ -743,7 +748,10 @@ export const Main = () => {
                                 setPlaceHolderBranch((prev) => {
                                   return {
                                     ...prev,
-                                    start_time: newValue,
+                                    start_time:
+                              newValue.$H +
+                              ":" +
+                              (newValue.$m == "0" ? "00" : newValue.$m),
                                   };
                                 })
                               }
@@ -758,7 +766,10 @@ export const Main = () => {
                                 setPlaceHolderBranch((prev) => {
                                   return {
                                     ...prev,
-                                    end_time: newValue,
+                                    end_time:
+                                    newValue.$H +
+                                    ":" +
+                                    (newValue.$m == "0" ? "00" : newValue.$m),
                                   };
                                 })
                               }
