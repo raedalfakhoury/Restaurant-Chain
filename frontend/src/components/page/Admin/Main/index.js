@@ -43,7 +43,7 @@ export const Main = () => {
   const getResId = async (id) => {
     try {
       const result = await axios.get(
-        `http://localhost:5000/restaurant/branch/${id}`,
+        `https://restaurant-chain.onrender.com/restaurant/branch/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,7 +72,7 @@ export const Main = () => {
     e.preventDefault();
     try {
       const result = await axios.put(
-        "http://localhost:5000/restaurant/branch/editres",
+        "https://restaurant-chain.onrender.com/restaurant/branch/editres",
         placeHolderBranch,
         {
           headers: {
@@ -127,7 +127,7 @@ export const Main = () => {
 
   const getAllBranch = () => {
     axios
-      .get("http://localhost:5000/restaurant/", {
+      .get("https://restaurant-chain.onrender.com/restaurant/", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -147,7 +147,7 @@ export const Main = () => {
   const getAllMenu = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:5000/restaurant/allmenu",
+        "https://restaurant-chain.onrender.com/restaurant/allmenu",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -169,7 +169,7 @@ export const Main = () => {
   const handleDeleteBranch = (restaurant_id) => {
     axios
       .put(
-        `http://localhost:5000/restaurant/restaurantBranch/delete/${restaurant_id}`
+        `https://restaurant-chain.onrender.com/restaurant/restaurantBranch/delete/${restaurant_id}`
       )
       .then((result) => {
         if (result.data.message === "restaurant deleted successfully") {
@@ -362,7 +362,7 @@ export const Main = () => {
                     handleClose();
                     axios
                       .post(
-                        `http://localhost:5000/restaurant/menu`,
+                        `https://restaurant-chain.onrender.com/restaurant/menu`,
                         resMenuId,
                         {
                           headers: {
@@ -625,7 +625,7 @@ export const Main = () => {
                               e.preventDefault();
                               axios
                                 .post(
-                                  "http://localhost:5000/restaurant/maintenance/",
+                                  "https://restaurant-chain.onrender.com/restaurant/maintenance/",
                                   maintenanceInfo,
                                   {
                                     headers: {

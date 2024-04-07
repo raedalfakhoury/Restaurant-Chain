@@ -12,7 +12,7 @@ export const Details = () => {
 
   const getAllBranch = () => {
     axios
-      .get("http://localhost:5000/restaurant//maintenance_res/", {
+      .get("https://restaurant-chain.onrender.com/restaurant//maintenance_res/", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

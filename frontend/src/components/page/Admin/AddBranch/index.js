@@ -154,7 +154,7 @@ const AddBranch = () => {
                       handleClick();
                       axios
                         .post(
-                          "http://localhost:5000/restaurant/add",
+                          "https://restaurant-chain.onrender.com/restaurant/add",
                           branchInfo,
                           {
                             headers: {

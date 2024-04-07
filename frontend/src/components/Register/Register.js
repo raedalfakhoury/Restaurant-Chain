@@ -5,6 +5,7 @@ import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomizedSnackbars from "../snackBar/Snackbar";
+import "../Register/Register.css"
 const Register = () => {
   const navigate = useNavigate();
   const [registerInfo, setRegisterInfo] = useState({});
@@ -82,7 +83,7 @@ const Register = () => {
               try {
                 handleClick()
                 const result = await axios.post(
-                  "http://localhost:5000/user/register",
+                  "https://restaurant-chain.onrender.com/user/register",
                   registerInfo
                 );
                 console.log(result.data);
@@ -105,7 +106,7 @@ const Register = () => {
           <a
             class="forgotLink"
             onClick={() => {
-              navigate("login");
+              navigate("/login");
             }}
           >
             You Have Account?

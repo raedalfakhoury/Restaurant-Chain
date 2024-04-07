@@ -21,7 +21,7 @@ const Home = () => {
   const getAllRestaurant = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:5000/restaurant/details"
+        "https://restaurant-chain.onrender.com/restaurant/details"
       );
       console.log(result?.data?.result);
       setRestaurant(result?.data?.result);
@@ -33,7 +33,7 @@ const Home = () => {
   const getmenuByRestaurantId = async (id) => {
     try {
       const result = await axios.get(
-        `http://localhost:5000/restaurant/menuByRestaurantId/${id}`
+        `https://restaurant-chain.onrender.com/restaurant/menuByRestaurantId/${id}`
       );
       console.log(result.data.result.length);
       setMenu(result.data.result);
@@ -74,6 +74,7 @@ const Home = () => {
         }}
       >
         {restaurant?.map((item) => {
+          console.log(item);
           return (
             <div class="card">
               <div
@@ -115,7 +116,7 @@ const Home = () => {
                   class="title"
                   style={{ fontWeight: "400", marginTop: "5px" }}
                 >
-                  اقرب معلم : {item.nearby_landmarks}
+                       {item.nearby_landmarks}
                 </span>
                 <span
                   class="title"
@@ -129,11 +130,11 @@ const Home = () => {
                 </span>
                 <div class="row row1">
                   <div class="item">
-                    <span class="big-text">{item.start_time} am</span>
+                    <span class="big-text">{item.restaurant_start_time}</span>
                     <span class="regular-text">Open</span>
                   </div>
                   <div class="item">
-                    <span class="big-text">{item.end_time} pm</span>
+                    <span class="big-text">{item.restaurant_end_time}</span>
                     <span class="regular-text">Close</span>
                   </div>
                   <div class="item">

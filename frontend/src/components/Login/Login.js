@@ -84,7 +84,7 @@ const Login = () => {
               try {
                 handleClick();
                 const result = await axios.post(
-                  "http://localhost:5000/user/login",
+                  "https://restaurant-chain.onrender.com/user/login",
                   login
                 );
                 console.log(result.data);
@@ -113,7 +113,7 @@ const Login = () => {
           <a
             class="forgotLink"
             onClick={() => {
-              navigate("register");
+              navigate("/register");
             }}
           >
             You Don’t Have Account?

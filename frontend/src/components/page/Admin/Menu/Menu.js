@@ -200,7 +200,7 @@ const Menu = () => {
                       e.preventDefault();
                       handleClick();
                       axios
-                        .post("http://localhost:5000/restaurant/item", menuInfo,
+                        .post("https://restaurant-chain.onrender.com/restaurant/item", menuInfo,
                         {
                           headers: {
                             Authorization: `Bearer ${token}`,
