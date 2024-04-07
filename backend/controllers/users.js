@@ -4,13 +4,11 @@ const bcrypt = require("bcryptjs");
 const saltRounds = parseInt(process.env.SALT);
  
 const register = async (req, res) => {
-  const { first_name, last_name, email, password } =
+  const { email, password } =
     req.body; 
   const encryptedPassword = await bcrypt.hash(password, saltRounds);
-  const query = `INSERT INTO users (first_name, last_name, email, password) VALUES ($1,$2,$3,$4)`;
-  const data = [
-    first_name,
-    last_name, 
+  const query = `INSERT INTO users (email, password) VALUES ($1,$2)`;
+  const data = [  
     email.toLowerCase(),
     encryptedPassword
   ];
@@ -20,6 +18,7 @@ const register = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "Account created successfully",
+        result
       });
     })
     .catch((err) => {
@@ -45,9 +44,7 @@ const login = (req, res) => {
           if (err) res.json(err);
           if (response) {
             const payload = {
-              userId: result.rows[0].user_id,
-              // role:result.rows[0].role_id,
-              // permissions: result.rows[0].role_id,
+              userId: result.rows[0].user_id, 
               role: {
                 role:
                 result.rows[0].role_id == "2" ? "Admin" : "User",

@@ -7,9 +7,7 @@ CREATE TABLE Roles (
 
 -- Create a table called users in the database
 CREATE TABLE users (
-  user_id SERIAL PRIMARY KEY,
-  first_name VARCHAR(255) ,
-  last_name VARCHAR(255) UNIQUE, 
+  user_id SERIAL PRIMARY KEY, 
   email VARCHAR(255) UNIQUE,
   password VARCHAR(255),
   role_id INT DEFAULT 1,

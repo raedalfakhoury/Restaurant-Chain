@@ -1,15 +1,18 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
-import CustomizedSnackbars from "../../../snackBar/Snackbar"; 
+import CustomizedSnackbars from "../../../snackBar/Snackbar";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import "../AddBranch/index.css"
+import "../AddBranch/index.css";
+import { ApplicationContext } from "../../../../App";
 const AddBranch = () => {
-  const [branchInfo, setBranchInfo] = useState({}); 
+  const { token } = useContext(ApplicationContext);
+
+  const [branchInfo, setBranchInfo] = useState({});
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [SnackBarText, setSnackBarText] = useState("");
   const [SnackBarStatus, setSnackBarStatus] = useState("");
@@ -91,17 +94,17 @@ const AddBranch = () => {
                       label="Start Time"
                       value={startTime}
                       onChange={(newValue) =>
-                        setBranchInfo((prevObject) => {  
-                        
-                           
-                          setStartTime(newValue );
+                        setBranchInfo((prevObject) => {
+                          setStartTime(newValue);
                           return {
                             ...prevObject,
-                            start_time: newValue.$H +":" + (newValue.$m == "0" ?  "00" : newValue.$m ),
+                            start_time:
+                              newValue.$H +
+                              ":" +
+                              (newValue.$m == "0" ? "00" : newValue.$m),
                           };
                         })
                       }
-                   
                       slotProps={{
                         openPickerButton: { style: openPickerButtonStyle },
                       }}
@@ -110,15 +113,15 @@ const AddBranch = () => {
                     <TimePicker
                       label="End Time"
                       value={endTime}
-                  
                       onChange={(newValue) =>
                         setBranchInfo((prevObject) => {
-                   
-                        
-                          setEndTime(newValue );
+                          setEndTime(newValue);
                           return {
                             ...prevObject,
-                            end_time: newValue.$H +":" + (newValue.$m == "0" ? "00" : newValue.$m ),
+                            end_time:
+                              newValue.$H +
+                              ":" +
+                              (newValue.$m == "0" ? "00" : newValue.$m),
                           };
                         })
                       }
@@ -152,7 +155,12 @@ const AddBranch = () => {
                       axios
                         .post(
                           "http://localhost:5000/restaurant/add",
-                          branchInfo
+                          branchInfo,
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
                         )
                         .then((result) => {
                           if (

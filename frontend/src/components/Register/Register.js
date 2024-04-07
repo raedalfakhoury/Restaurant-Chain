@@ -1,28 +1,26 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useContext } from "react";
-import "../Login/Login.css";
+/* eslint-disable no-undef */
+import React, { useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import CustomizedSnackbars from "../snackBar/Snackbar";
 import axios from "axios";
-import { ApplicationContext } from "../../App";
-const Login = () => {
-  const { token, setToken } = useContext(ApplicationContext);
+import CustomizedSnackbars from "../snackBar/Snackbar";
+const Register = () => {
   const navigate = useNavigate();
-  const [login, setLogin] = useState({});
+  const [registerInfo, setRegisterInfo] = useState({});
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [SnackBarText, setSnackBarText] = useState("");
   const [SnackBarStatus, setSnackBarStatus] = useState("");
-
   const handleClick = () => {
     setOpenSnackBar(true);
   };
+
   return (
     <>
       <Navbar />
       <div>
         <form action="" class="form_main">
-          <p class="heading">Login</p>
+          <p class="heading">Register</p>
           <div class="inputContainer">
             <svg
               class="inputIcon"
@@ -40,7 +38,7 @@ const Login = () => {
               id="Email"
               placeholder="Email"
               onChange={(e) => {
-                setLogin((prevObject) => {
+                setRegisterInfo((prevObject) => {
                   return {
                     ...prevObject,
                     email: e.target.value,
@@ -67,7 +65,7 @@ const Login = () => {
               id="password"
               placeholder="Password"
               onChange={(e) => {
-                setLogin((prevObject) => {
+                setRegisterInfo((prevObject) => {
                   return {
                     ...prevObject,
                     password: e.target.value,
@@ -82,29 +80,23 @@ const Login = () => {
             onClick={async (e) => {
               e.preventDefault();
               try {
-                handleClick();
+                handleClick()
                 const result = await axios.post(
-                  "http://localhost:5000/user/login",
-                  login
+                  "http://localhost:5000/user/register",
+                  registerInfo
                 );
                 console.log(result.data);
-                setToken(result.data.token);
-                localStorage.setItem("token", result.data.token);
-                setSnackBarText("Valid login credentials");
+                setSnackBarText("Account created successfully");
                 setSnackBarStatus("success");
-                setTimeout(() => {
-                  if (result.data.role === "Admin") {
-                    navigate("admin")
-                   }else{
-                    navigate("/")
-                   }
-                }, 1000); 
+               setTimeout(() => {
+                navigate("login")
+               }, 500);
+
               } catch (error) {
                 console.log(error);
-                setSnackBarText(
-                  "The email doesn’t exist or the password you’ve entered is incorrect"
-                );
+                setSnackBarText("The email already exists");
                 setSnackBarStatus("error");
+                
               }
             }}
           >
@@ -113,10 +105,10 @@ const Login = () => {
           <a
             class="forgotLink"
             onClick={() => {
-              navigate("register");
+              navigate("login");
             }}
           >
-            You Don’t Have Account?
+            You Have Account?
           </a>
         </form>
       </div>
@@ -131,4 +123,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

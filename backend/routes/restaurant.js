@@ -22,30 +22,30 @@ const restaurantRouter = express.Router();
 
 restaurantRouter.post(
   "/add",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   addRestaurant
 );
 restaurantRouter.put(
   "/branch/editres",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   editRestaurantInfo
 );
 restaurantRouter.put(
   "/restaurantBranch/delete/:id",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   deleteRestaurant
 );
 restaurantRouter.post("/item",
-//  authentication, authorization("manage"), 
+ authentication, authorization("manage"), 
  menu);
 
  restaurantRouter.get(
   "/allmenu",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   getMenu
 );
 
@@ -66,14 +66,14 @@ restaurantRouter.put(
 
 restaurantRouter.post(
   "/menu",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   restaurant_menu
 );
 restaurantRouter.post(
   "/maintenance/",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   maintenance
 );
 restaurantRouter.put(
@@ -84,20 +84,20 @@ restaurantRouter.put(
 );
 restaurantRouter.get(
   "/maintenance_res/",
-  // authentication,
-  // authorization("manage"),
+  authentication,
+  authorization("manage"),
   maintenance_restaurant
 );
 restaurantRouter.get(
   "/",
-  // authentication,
-  // authorization("view"),
+  authentication,
+  authorization("view"),
   getAllRestaurantbranch
 );
 restaurantRouter.get(
   "/branch/:restaurant_id",
-  // authentication,
-  // authorization("view"),
+  authentication,
+  authorization("view"),
   getAllRestaurantbranchById
 );
 restaurantRouter.get(

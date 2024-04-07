@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -17,13 +17,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-
+import { ApplicationContext } from "../../../../App";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import EditIcon from "@mui/icons-material/Edit";
 export const Main = () => {
+  const { token } = useContext(ApplicationContext);
   const [allBranch, setAllBranch] = useState([]);
   const [menu, setmenu] = useState([]);
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -51,8 +52,7 @@ export const Main = () => {
         end_time: result.data.result.end_time,
         nearby_landmarks: result.data.result.nearby_landmarks,
         restaurant_id: result.data.result.restaurant_id,
-      });
-      console.log("place", placeHolderBranch);
+      }); 
       handleOpenModalEdit();
     } catch (error) {
       console.log(error);
@@ -119,7 +119,12 @@ export const Main = () => {
 
   const getAllBranch = () => {
     axios
-      .get("http://localhost:5000/restaurant/")
+      .get("http://localhost:5000/restaurant/",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((result) => {
         const rowsWithId = result.data.result.map((row) => ({
           id: row.restaurant_id,
@@ -135,7 +140,12 @@ export const Main = () => {
   const getAllMenu = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:5000/restaurant/allmenu"
+        "http://localhost:5000/restaurant/allmenu",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setmenu(result.data.result);
     } catch (error) {
@@ -151,7 +161,12 @@ export const Main = () => {
   const handleDeleteBranch = (restaurant_id) => {
     axios
       .put(
-        `http://localhost:5000/restaurant/restaurantBranch/delete/${restaurant_id}`
+        `http://localhost:5000/restaurant/restaurantBranch/delete/${restaurant_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       .then((result) => {
         if (result.data.message === "restaurant deleted successfully") {
@@ -343,7 +358,12 @@ export const Main = () => {
 
                     handleClose();
                     axios
-                      .post(`http://localhost:5000/restaurant/menu`, resMenuId)
+                      .post(`http://localhost:5000/restaurant/menu`, resMenuId ,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      })
                       .then((result) => {
                         handleClickSnack();
                         if (result.data.message === "Added Successfully") {
@@ -599,7 +619,12 @@ export const Main = () => {
                               axios
                                 .post(
                                   "http://localhost:5000/restaurant/maintenance/",
-                                  maintenanceInfo
+                                  maintenanceInfo,
+                                  {
+                                    headers: {
+                                      Authorization: `Bearer ${token}`,
+                                    },
+                                  }
                                 )
                                 .then((result) => {
                                   handleClickSnack();

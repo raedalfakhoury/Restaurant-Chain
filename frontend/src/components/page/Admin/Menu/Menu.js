@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import CustomizedSnackbars from "../../../snackBar/Snackbar";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -8,8 +8,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import "../Menu/Menu.css";
+import { ApplicationContext } from "../../../../App";
 const Menu = () => {
-  
+  const { token } = useContext(ApplicationContext);
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [SnackBarText, setSnackBarText] = useState("");
   const [SnackBarStatus, setSnackBarStatus] = useState("");
@@ -136,7 +137,12 @@ const Menu = () => {
                       e.preventDefault();
                       handleClick();
                       axios
-                        .post("http://localhost:5000/restaurant/item", menuInfo)
+                        .post("http://localhost:5000/restaurant/item", menuInfo,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        })
                         .then((result) => {
                           if (
                             result?.data?.message == "menu created successfully"

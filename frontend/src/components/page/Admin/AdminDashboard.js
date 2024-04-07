@@ -21,7 +21,7 @@ import DetailsIcon from '@mui/icons-material/Details';
 import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantOutlined";
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Outlet } from "react-router-dom";
-
+import { BiLogOut } from "react-icons/bi"; 
 const drawerWidth = 240;
 
 const AdminDashboard = () => {
@@ -49,6 +49,7 @@ const AdminDashboard = () => {
             >
               AdminDashboard
             </Typography>
+          <BiLogOut className="logout" title="logout" onClick={() => {navigate("/")}} />
           </Toolbar>
         </AppBar>
         <Drawer

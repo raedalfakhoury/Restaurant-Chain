@@ -39,7 +39,7 @@ const addRestaurant = async (req, res) => {
 // ! to edit branch information
 const editRestaurantInfo = async (req, res) => {
   const {
-    restaurant_Name,
+    restaurant_name,
     Phone,
     Street_name,
     start_time,
@@ -49,16 +49,24 @@ const editRestaurantInfo = async (req, res) => {
   } = req.body;
 
   const query = `UPDATE restaurant
-    SET restaurant_Name = $1 , Phone = $2 , Street_name = $3 , start_time = $4 ,  end_time = $5 , nearby_landmarks = $6 
-    WHERE restaurant_id = $7;`;
+  SET 
+      restaurant_name = COALESCE($1, restaurant_name),
+      Phone = COALESCE($2, Phone),
+      Street_name = COALESCE($3, Street_name),
+      start_time = COALESCE($4, start_time),
+      end_time = COALESCE($5, end_time),
+      nearby_landmarks = COALESCE($6, nearby_landmarks)
+  WHERE 
+      restaurant_id = COALESCE($7, restaurant_id);
+  `;
   const data = [
-    restaurant_Name,
-    Phone,
-    Street_name,
-    start_time,
-    end_time,
-    nearby_landmarks,
-    restaurant_id,
+    restaurant_name || null,
+    Phone || null,
+    Street_name || null,
+    start_time || null,
+    end_time || null,
+    nearby_landmarks || null,
+    restaurant_id || null,
   ];
   pool
     .query(query, data)
@@ -250,7 +258,7 @@ const getAllRestaurantbranchById = (req, res) => {
         res.status(200).json({
           success: true,
           message: "branch getting successfully",
-          result: result.rows,
+          result: result.rows[0],
         });
       } else {
         throw Error;
@@ -332,7 +340,7 @@ const maintenance = (req, res) => {
     restaurant_id,
   } = req.body;
 
-  const query = `INSERT INTO maintenance (start_maintenance_date,
+  const query = `INSERT INTO maintenance ( start_maintenance_date,
     end_maintenance_date, Labour_Number, Labor_Rate_Per_day, material_cost,comments,impact,restaurant_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`;
   const data = [
     start_maintenance_date,
@@ -404,7 +412,7 @@ const editMaintenance = (req, res) => {
 };
 
 //! to get all information about restaurant and maintenance
-const maintenance_restaurant = (req, res) => { 
+const maintenance_restaurant = (req, res) => {
   const query = `
   SELECT
     restaurant.restaurant_id,
