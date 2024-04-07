@@ -321,7 +321,7 @@ export const Main = () => {
 
   return (
     <>
-      <div style={{ width: "100%", marginTop: "80px", marginLeft: "2px" }}>
+      <div style={{ width: "100%",marginTop: "70px", marginLeft: "240px" , position:"fixed" }}>
         <Box sx={{ mb: 1 }}></Box>
         <div style={{ height: 600 }}>
           <DataGrid
