@@ -124,4 +124,16 @@
 }
 .menu:hover {
   color: red;
+  
+}
+
+.leftRight{
+    display: flex;
+    flex-direction: column;
+}
+.img{
+    display: flex;
+    justify-content: start;
+    border-bottom: 1px solid gray;
+    margin-bottom: 3px;
 }

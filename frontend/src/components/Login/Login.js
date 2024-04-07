@@ -7,7 +7,7 @@ import CustomizedSnackbars from "../snackBar/Snackbar";
 import axios from "axios";
 import { ApplicationContext } from "../../App";
 const Login = () => {
-  const { token, setToken } = useContext(ApplicationContext);
+  const {  setToken } = useContext(ApplicationContext);
   const navigate = useNavigate();
   const [login, setLogin] = useState({});
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -94,7 +94,7 @@ const Login = () => {
                 setSnackBarStatus("success");
                 setTimeout(() => {
                   if (result.data.role === "Admin") {
-                    navigate("admin")
+                    navigate("/admin")
                    }else{
                     navigate("/")
                    }

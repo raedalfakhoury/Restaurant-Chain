@@ -20,7 +20,7 @@ export const routers = createBrowserRouter([
     element: <Contact />,
   },
   {
-    path: "login",
+    path: "/login",
     element: <Login />,
   },
   {
@@ -28,12 +28,12 @@ export const routers = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "about",
+    path: "/about",
     element: <About />,
   },
 
   {
-    path: "admin",
+    path: "/admin",
     element: <AdminDashboard />,
     children: [
       {

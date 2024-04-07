@@ -112,10 +112,10 @@ const deleteRestaurant = (req, res) => {
 
 //! to add new item in menu
 const menu = async (req, res) => {
-  const { item, description, price, start_time, end_time } = req.body;
+  const { item, description, price, image, start_time, end_time } = req.body;
 
-  const query = `INSERT INTO menu (item, description,price, start_time , end_time) VALUES ($1,$2,$3,$4,$5)`;
-  const data = [item, description, price, start_time, end_time];
+  const query = `INSERT INTO menu (item, description,price,image ,start_time , end_time) VALUES ($1,$2,$3,$4,$5,$6)`;
+  const data = [item, description, price, image, start_time, end_time];
   pool
     .query(query, data)
     .then((result) => {
@@ -457,38 +457,28 @@ WHERE restaurant.is_deleted = 0
     });
 };
 
-
-
 //! to get all information about restaurant , menu and maintenance
 const details = (req, res) => {
-  const query = `
-  SELECT DISTINCT
+  const query = `SELECT DISTINCT ON (r.restaurant_id)
   r.restaurant_id,
   r.restaurant_Name,
   r.Phone,
-  r.Street_name, 
-  r.start_time, 
-  r.end_time, 
-  r.nearby_landmarks,
-  m.menu_id,
-  m.item,
-  m.description,
-  m.price,
-  m.start_time AS menu_start_time,
-  m.end_time AS menu_end_time,
-  mt.start_maintenance_date,
-  mt.end_maintenance_date,
-  
-  mt.comments AS maintenance_comments,
-  mt.impact AS maintenance_impact
-FROM 
+  r.Street_name,
+  r.start_time AS restaurant_start_time,
+  r.end_time AS restaurant_end_time,
+  r.nearby_landmarks, 
+  COALESCE(mt.impact, 'NONE') AS maintenance_impact
+FROM
   restaurant r
-JOIN 
-  restaurant_menu rm ON r.restaurant_id = rm.restaurant_id
-JOIN 
-  menu m ON rm.menu_id = m.menu_id
-LEFT JOIN 
-  maintenance mt ON r.restaurant_id = mt.restaurant_id;
+LEFT JOIN
+  maintenance mt ON r.restaurant_id = mt.restaurant_id  
+WHERE
+  r.is_deleted = 0
+ORDER BY
+  r.restaurant_id, mt.start_maintenance_date DESC;
+
+
+
 
     `;
   pool
@@ -509,7 +499,47 @@ LEFT JOIN
       });
     });
 };
+//! to get all information about restaurant and menu
+const getMenuByRestaurantId = (req, res) => {
+  const { id } = req.params;
+  const query = `
+  
+  SELECT DISTINCT
+  m.item,
+  m.description,
+  m.price,
+  m.image AS menu_image,
+  m.start_time AS start_time,
+  m.end_time AS end_time
+FROM
+  restaurant r
+JOIN
+  restaurant_menu rm ON r.restaurant_id = rm.restaurant_id
+JOIN
+  menu m ON rm.menu_id = m.menu_id
+WHERE
+  r.restaurant_id = $1;
 
+    `;
+  const data = [id];
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "getting successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
 
 module.exports = {
   addRestaurant,
@@ -526,5 +556,6 @@ module.exports = {
   editmenutInfo,
   deleteMenuItem,
   editMaintenance,
-  details
+  details,
+  getMenuByRestaurantId,
 };

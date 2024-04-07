@@ -155,6 +155,7 @@ export const Main = () => {
         }
       );
       setmenu(result.data.result);
+      console.log(result.data.result);
     } catch (error) {
       console.log(error);
     }
@@ -370,6 +371,7 @@ export const Main = () => {
                         }
                       )
                       .then((result) => {
+                        console.log(result.data);
                         handleClickSnack();
                         if (result.data.message === "Added Successfully") {
                           setSnackBarText("added successfully");

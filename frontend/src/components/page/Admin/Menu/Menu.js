@@ -7,8 +7,13 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import Button from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+
 import "../Menu/Menu.css";
 import { ApplicationContext } from "../../../../App";
+
 const Menu = () => {
   const { token } = useContext(ApplicationContext);
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -17,11 +22,53 @@ const Menu = () => {
   const [menuInfo, setMenuInfo] = useState({});
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
-
+  console.log(menuInfo);
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
   const handleClick = () => {
     setOpenSnackBar(true);
   };
+  const pr_key = "rllytlm7";
+  const cloud_name = "dmmo3zzyc";
 
+  const getImageUrl = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        formData
+      )
+      .then((result) => { 
+        handleClick()
+        setSnackBarText("uploaded successfully")
+        setSnackBarStatus("success")
+        setMenuInfo((prevObject) => {
+          return {
+            ...prevObject,
+            image: result.data.url,
+          }; 
+        });
+      
+      })
+      .catch((err) => {
+        console.log(err);
+        setSnackBarText("failed upload image")
+        setSnackBarStatus("error")
+      });
+  };
   const openPickerButtonStyle = {
     fontSize: "12px",
     width: "20px",
@@ -129,7 +176,23 @@ const Menu = () => {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
-
+                <div style={{display:"flex" , width:"100%" , justifyContent:"center" , marginTop:"10px"}}>
+                <Button
+                      component="label"
+                      role={undefined}
+                      variant="contained"
+                      tabIndex={-1}
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload image
+                      <VisuallyHiddenInput
+                        type="file"
+                        onChange={(e) => {
+                          getImageUrl(e); 
+                        }}
+                      />
+                    </Button>
+                </div>
                 <div className="create">
                   <button
                     className="btn"

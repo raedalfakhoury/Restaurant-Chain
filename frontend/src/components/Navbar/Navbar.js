@@ -32,7 +32,7 @@ const Navbar = () => {
         <input
           className="Btn"
           onClick={() => {
-            navigate("about");
+            navigate("/about");
           }}
           type="button"
           value="ABOUT US"

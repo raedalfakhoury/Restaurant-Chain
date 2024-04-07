@@ -4,15 +4,40 @@ import Navbar from "../Navbar/Navbar";
 import "../Home/Home.css";
 import axios from "axios";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 const Home = () => {
   const [restaurant, setRestaurant] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [restaurant_id, setrestaurant_id] = useState({});
+  const [menu, setMenu] = useState([]);
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => setOpenModal(false);
   const getAllRestaurant = async () => {
     try {
       const result = await axios.get(
         "http://localhost:5000/restaurant/details"
       );
-      console.log(result.data.result);
+      console.log(result?.data?.result);
       setRestaurant(result?.data?.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getmenuByRestaurantId = async (id) => {
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/restaurant/menuByRestaurantId/${id}`
+      );
+      console.log(result.data.result.length);
+      setMenu(result.data.result);
+      console.log(menu.length);
     } catch (error) {
       console.log(error);
     }
@@ -20,6 +45,7 @@ const Home = () => {
   useEffect(() => {
     getAllRestaurant();
   }, []);
+
   return (
     <>
       <Navbar />
@@ -68,16 +94,23 @@ const Home = () => {
                       src="https://crispychicken.rest/wp-content/uploads/2020/09/Arabic-english-logo-9001.png"
                     />
                   </div>
-                  <div class="social-media">
+                  <div
+                    class="social-media"
+                    onClick={() => {
+                      getmenuByRestaurantId(item.restaurant_id);
+                      handleOpenModal();
+                    }}
+                  >
                     <MenuBookIcon
                       className="menu"
                       style={{ cursor: "pointer", fontSize: "40px" }}
+                      titleAccess="show menu"
                     />
                   </div>
                 </div>
               </div>
               <div class="bottom-section">
-                <span class="title">فرع {item.street_name}</span>
+                <span class="title"> {item.street_name}</span>
                 <span
                   class="title"
                   style={{ fontWeight: "400", marginTop: "5px" }}
@@ -88,15 +121,19 @@ const Home = () => {
                   class="title"
                   style={{ fontWeight: "400", marginTop: "5px" }}
                 >
-                   {item.maintenance_impact === "Complete shutdown" ? <p style={{color:"red"  }}>مغلق حاليا</p> : ""}
+                  {item.maintenance_impact === "Complete shutdown" ? (
+                    <p style={{ color: "red" }}>مغلق حاليا</p>
+                  ) : (
+                    ""
+                  )}
                 </span>
                 <div class="row row1">
                   <div class="item">
-                    <span class="big-text">{item.start_time} Am</span>
+                    <span class="big-text">{item.start_time} am</span>
                     <span class="regular-text">Open</span>
                   </div>
                   <div class="item">
-                    <span class="big-text">{item.end_time} Pm</span>
+                    <span class="big-text">{item.end_time} pm</span>
                     <span class="regular-text">Close</span>
                   </div>
                   <div class="item">
@@ -108,6 +145,61 @@ const Home = () => {
             </div>
           );
         })}
+      </div>
+
+      {/*Modal for menu*/}
+      <div>
+        <Button onClick={handleOpenModal}>Open modal</Button>
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              display: "flex",
+              width: "700px",
+              position: "absolute",
+              top: "30%",
+              left: "25%",
+              background: "white",
+              maxHeight: "300px",
+              overflow: "auto",
+            }}
+          >
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <div className="leftRight">
+                {menu?.map((item) => {
+                  return (
+                    <div className="img">
+                      <img
+                        alt=""
+                        src={item?.menu_image}
+                        width="200px"
+                        height="200px"
+                      />
+
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <p style={{ fontWeight: "700", fontSize: "40px" }}>
+                          {item?.item}
+                        </p>
+                        <p style={{ fontWeight: "700" }}>{item?.description}</p>
+                        <p style={{ fontWeight: "700", color: "goldenrod" }}>
+                          {item?.price} JD
+                        </p>
+                        <p style={{ fontWeight: "700" }}>Serving Time</p>
+                        <p style={{ fontWeight: "700", color: "goldenrod" }}>
+                          {item?.start_time} am - {item?.end_time} pm
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Typography>{" "}
+          </Box>
+        </Modal>
       </div>
     </>
   );
