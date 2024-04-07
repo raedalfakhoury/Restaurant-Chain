@@ -15,6 +15,7 @@ const {
   editmenutInfo,
   deleteMenuItem,
   editMaintenance,
+  details
 } = require("../controllers/restaurant");
 const authorization = require("../middlewares/authorization");
 const authentication = require("../middlewares/authentication");
@@ -45,6 +46,11 @@ restaurantRouter.post("/item",
   authentication,
   authorization("manage"),
   getMenu
+);
+
+ restaurantRouter.get(
+  "/details", 
+  details
 );
 
 

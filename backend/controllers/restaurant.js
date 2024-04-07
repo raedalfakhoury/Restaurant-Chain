@@ -457,6 +457,60 @@ WHERE restaurant.is_deleted = 0
     });
 };
 
+
+
+//! to get all information about restaurant , menu and maintenance
+const details = (req, res) => {
+  const query = `
+  SELECT DISTINCT
+  r.restaurant_id,
+  r.restaurant_Name,
+  r.Phone,
+  r.Street_name, 
+  r.start_time, 
+  r.end_time, 
+  r.nearby_landmarks,
+  m.menu_id,
+  m.item,
+  m.description,
+  m.price,
+  m.start_time AS menu_start_time,
+  m.end_time AS menu_end_time,
+  mt.start_maintenance_date,
+  mt.end_maintenance_date,
+  
+  mt.comments AS maintenance_comments,
+  mt.impact AS maintenance_impact
+FROM 
+  restaurant r
+JOIN 
+  restaurant_menu rm ON r.restaurant_id = rm.restaurant_id
+JOIN 
+  menu m ON rm.menu_id = m.menu_id
+LEFT JOIN 
+  maintenance mt ON r.restaurant_id = mt.restaurant_id;
+
+    `;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "getting successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(409).json({
+        success: false,
+        message: "Server Error",
+        err,
+      });
+    });
+};
+
+
 module.exports = {
   addRestaurant,
   menu,
@@ -472,4 +526,5 @@ module.exports = {
   editmenutInfo,
   deleteMenuItem,
   editMaintenance,
+  details
 };
