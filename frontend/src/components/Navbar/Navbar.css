@@ -1,0 +1,110 @@
+*{
+    box-sizing: border-box; 
+        margin: 0px;
+        padding: 0px;
+    }
+    .Navbar1{
+        display: flex;
+        justify-content: space-between;
+        height: 70px;
+        align-items: center;
+        background:linear-gradient(to top, #f6ff00, rgba(187, 154, 5, 0.573));
+        padding: 0px 30px; 
+    }
+    .Btn{
+        background-color: transparent;
+        border: 0px;
+        font-size: 20px;
+        font-weight: 700;
+        width: 200px;
+    }
+    .Btn:hover{
+        color: red;
+        cursor: pointer;
+    }
+    .links{
+        display: flex; 
+        font-size: 22px;
+        font-weight: 600;
+        
+    }
+    
+    .icon{
+        display: flex; 
+        gap: 35px;
+        align-items: center;
+    }  
+    .personIcon{
+        font-size: 30px;
+        gap: 35px;
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer;
+    } 
+     .logout{
+        font-size: 30px;
+        font-weight: bold;
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer;
+     }
+    .logout:hover{
+        color: red;
+        transform: scale(1.5);
+    }
+    .personIcon:hover{
+        color: red;
+        transform: scale(1.5);
+    }  
+    
+
+
+
+
+
+
+
+
+
+
+
+       #h1 {
+        font: 800 30px/1.1 'Arial Black', sans-serif;
+        text-align: center;
+        background-color: #f0f0f0;
+        position: relative;
+        border: 1px solid #bbb;
+        border-radius: 10px;
+        padding: 0 20px 10px 20px;
+        box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
+    }
+    .background {
+        background:linear-gradient(to right, #f6ff00, rgb(255, 0, 0));
+        /* background: linear-gradient(to right, #000000, rgba(255, 208, 1, 0.5)); */
+    }
+    .text {
+        position: relative; 
+        color: black;
+        
+    }
+    .invert {
+        background: white;
+        mix-blend-mode: difference;
+    }
+    .invert,
+    .background {
+        position: absolute;
+        top: 0;
+        right: 50%;
+        bottom: 0;
+        left: 0;
+        border-radius: 10px 0 0 10px;
+        animation: slide 5s ease-in-out infinite alternate;
+    }
+    @keyframes slide {
+        from {
+            right: 10%;
+        }
+        to {
+            right: 90%;
+        }
+    }
+    

@@ -5,18 +5,31 @@ import AddBranch from "../page/Admin/AddBranch";
 import Menu from "../page/Admin/Menu/Menu";
 import { Details } from "../page/Admin/Details/Details";
 import Login from "../Login/Login";
+import Home from "../Home/Home";
+import About from "../About/About";
 
 
 
 
 export const routers = createBrowserRouter([
+  
   {
-    path: "/login",
+    path: "/",
+    element: <Home/>,
+    
+  },
+  {
+    path: "login",
     element: <Login/>,
      
   },
+  {
+    path: "about",
+    element: <About/>,
+     
+  },
     {
-      path: "/",
+      path: "admin",
       element: <AdminDashboard/>,
       children: [
         {

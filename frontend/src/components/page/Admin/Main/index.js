@@ -32,6 +32,56 @@ export const Main = () => {
   const [resMenuId, setResMenuId] = useState({});
   const [maintenanceInfo, setMaintenanceInfo] = useState({});
   const [placeHolderBranch, setPlaceHolderBranch] = useState({});
+
+  const getResId = async (id) => {
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/restaurant/branch/${id}`
+      );
+      console.log(result.data.result, "resInfo");
+      setResMenuId({
+        restaurant_id: result.data.result.restaurant_id,
+      });
+
+      setPlaceHolderBranch({
+        restaurant_name: result.data.result.restaurant_name,
+        phone: result.data.result.phone,
+        street_name: result.data.result.street_name,
+        start_time: result.data.result.start_time,
+        end_time: result.data.result.end_time,
+        nearby_landmarks: result.data.result.nearby_landmarks,
+        restaurant_id: result.data.result.restaurant_id,
+      });
+      console.log("place", placeHolderBranch);
+      handleOpenModalEdit();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editBranchById = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await axios.put(
+        "http://localhost:5000/restaurant/branch/editres",
+        placeHolderBranch
+      );
+      handleCloseModalEdit();
+
+      setSnackBarText("restaurant updated successfully");
+      setSnackBarStatus("success");
+      getAllBranch();
+      setTimeout(() => {
+        handleClickSnack();
+      }, 500);
+    } catch (error) {
+      console.log(error, "err");
+      setSnackBarText("Server Error");
+      setSnackBarStatus("error");
+      handleClickSnack();
+      handleCloseModalEdit();
+    }
+  };
   const [editBranch, setEditBranch] = useState({});
   // for maintenance modal
   const [openModal, setOpenModal] = React.useState(false);
@@ -82,18 +132,20 @@ export const Main = () => {
         console.log(err);
       });
   };
+  const getAllMenu = async () => {
+    try {
+      const result = await axios.get(
+        "http://localhost:5000/restaurant/allmenu"
+      );
+      setmenu(result.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     getAllBranch();
-    axios
-      .get("http://localhost:5000/restaurant/allmenu")
-      .then((result) => {
-        setmenu(result.data.result);
-        // console.log(result.data.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getAllMenu();
   }, []);
 
   const handleDeleteBranch = (restaurant_id) => {
@@ -218,38 +270,9 @@ export const Main = () => {
           aria-label="Add"
           style={{ width: "50px", color: "blue" }}
           onClick={async (e) => {
+            getResId(params.row.restaurant_id);
             setEditBranch({ restaurant_id: params.row.restaurant_id });
             e.preventDefault();
-            try {
-              const result = await axios.get(
-                `http://localhost:5000/restaurant/branch/${params.row.restaurant_id}`
-              );
-              console.log(result.data.result[0], "resInfo");
-              setResMenuId({
-                restaurant_id: result.data.result[0].restaurant_id,
-              });
-              console.log(resMenuId);
-              const {
-                restaurantName,
-                Phone,
-                streetName,
-                startTime,
-                endTime,
-                nearbyLandmarks,
-              } = result?.data?.result[0];
-              setPlaceHolderBranch({
-                restaurant_name: restaurantName,
-                phone: Phone,
-                street_name: streetName,
-                start_time: startTime,
-                end_time: endTime,
-                nearby_landmarks: nearbyLandmarks,
-              });
-              console.log("place", placeHolderBranch);
-              handleOpenModalEdit();
-            } catch (error) {
-              console.log(error);
-            }
           }}
         >
           <EditIcon />
@@ -645,28 +668,27 @@ export const Main = () => {
                       <div className="input-group">
                         <p className="text">Restaurant Name</p>
                         <input
-                          required
                           className="input"
+                          value={placeHolderBranch.restaurant_name}
                           type="username"
                           onChange={(e) => {
-                            setEditBranch((prevObject) => {
+                            setPlaceHolderBranch((prev) => {
                               return {
-                                ...prevObject,
-                                restaurant_Name: e.target.value,
+                                ...prev,
+                                restaurant_name: e.target.value,
                               };
                             });
                           }}
                         />
                         <p class="text">Phone</p>
                         <input
-                          required
                           className="input"
                           type="tel"
-                          placeholder={placeHolderBranch.phone}
+                          value={placeHolderBranch.Phone}
                           onChange={(e) => {
-                            setEditBranch((prevObject) => {
+                            setPlaceHolderBranch((prev) => {
                               return {
-                                ...prevObject,
+                                ...prev,
                                 Phone: e.target.value,
                               };
                             });
@@ -674,13 +696,13 @@ export const Main = () => {
                         />
                         <p className="text">Street Name</p>
                         <input
-                          required
                           className="input"
                           type="text"
+                          value={placeHolderBranch.Street_name}
                           onChange={(e) => {
-                            setEditBranch((prevObject) => {
+                            setPlaceHolderBranch((prev) => {
                               return {
-                                ...prevObject,
+                                ...prev,
                                 Street_name: e.target.value,
                               };
                             });
@@ -693,9 +715,9 @@ export const Main = () => {
                             <TimePicker
                               label="Start Time"
                               onChange={(newValue) =>
-                                setEditBranch((prevObject) => {
+                                setPlaceHolderBranch((prev) => {
                                   return {
-                                    ...prevObject,
+                                    ...prev,
                                     start_time: newValue,
                                   };
                                 })
@@ -708,9 +730,9 @@ export const Main = () => {
                             <TimePicker
                               label="End Time"
                               onChange={(newValue) =>
-                                setEditBranch((prevObject) => {
+                                setPlaceHolderBranch((prev) => {
                                   return {
-                                    ...prevObject,
+                                    ...prev,
                                     end_time: newValue,
                                   };
                                 })
@@ -724,13 +746,13 @@ export const Main = () => {
 
                         <p class="text">Nearby Landmarks</p>
                         <input
-                          required
                           className="input"
+                          value={placeHolderBranch.nearby_landmarks}
                           type="text"
                           onChange={(e) => {
-                            setEditBranch((prevObject) => {
+                            setPlaceHolderBranch((prev) => {
                               return {
-                                ...prevObject,
+                                ...prev,
                                 nearby_landmarks: e.target.value,
                               };
                             });
@@ -741,32 +763,7 @@ export const Main = () => {
                           <button
                             className="btn"
                             onClick={(e) => {
-                              e.preventDefault();
-                              axios
-                                .put(
-                                  "http://localhost:5000/restaurant/branch/editres",
-                                  editBranch
-                                )
-                                .then((result) => {
-                                  handleClickSnack();
-                                  if (
-                                    result?.data?.message ==
-                                    "restaurant updated successfully"
-                                  ) {
-                                    setSnackBarText(
-                                      "restaurant updated successfully"
-                                    );
-                                    setSnackBarStatus("success");
-                                    handleCloseModal();
-                                    getAllBranch();
-                                  }
-                                })
-                                .catch((err) => {
-                                  console.log(err, "err");
-                                  setSnackBarText("Server Error");
-                                  setSnackBarStatus("error");
-                                  handleClickSnack();
-                                });
+                              editBranchById(e);
                             }}
                           >
                             Edit
