@@ -78,7 +78,6 @@ const Home = () => {
           }}
         >
           {restaurant?.map((item) => {
-            console.log(item);
             return (
               <div class="card">
                 <div
