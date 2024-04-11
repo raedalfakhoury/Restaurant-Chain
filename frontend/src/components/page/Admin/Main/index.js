@@ -34,6 +34,8 @@ export const Main = () => {
   const [resMenuId, setResMenuId] = useState({});
   const [maintenanceInfo, setMaintenanceInfo] = useState({});
   const [placeHolderBranch, setPlaceHolderBranch] = useState({});
+  const [menu_id , setMenu_id] = useState()
+  const [restaurant_id , setRestaurant_id] = useState()
  // for maintenance modal
  const [openModal, setOpenModal] = useState(false);
  // for edit branch modal
@@ -186,7 +188,13 @@ export const Main = () => {
       });
   };
   
-
+  const getMenuId = async (id) => {
+    try {
+       setMenu_id(id)
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const columns = [
     {
       field: "restaurant_name",
@@ -352,18 +360,12 @@ export const Main = () => {
                   style={{}}
                   key={option.menu_id}
                   onClick={() => {
-                    setResMenuId((prev) => {
-                      return {
-                        ...prev,
-                        menu_id: option.menu_id,
-                      };
-                    });
-
+                    getMenuId(option.menu_id) 
                     handleClose();
                     axios
                       .post(
                         `https://restaurant-chain.onrender.com/restaurant/menu`,
-                        resMenuId,
+                        {restaurant_id,menu_id},
                         {
                           headers: {
                             Authorization: `Bearer ${token}`,
